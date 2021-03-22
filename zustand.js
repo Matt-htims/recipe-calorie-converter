@@ -27,14 +27,3 @@ export const recipeStore = create(
 		setRecipeData: res => set(state => ({ recipeData: res })),
 	}))
 );
-
-export const linkRecipeStore = create(
-	devtools(set => ({
-		linkRecipeData: {},
-		formattedData: {},
-		recipeURL: '',
-		updateRecipeURL: newURL => set(state => ({ recipeURL: newURL })),
-		setLinkRecipeData: res => set(state => ({ linkRecipeData: res })),
-		setFormattedData: data => set(state => ({ formattedData: data })),
-	}))
-);

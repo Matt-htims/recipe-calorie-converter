@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
 	purge: [],
 	darkMode: false, // or 'media' or 'class'
@@ -25,10 +27,13 @@ module.exports = {
 			},
 		},
 		fontFamily: {
-			main: ['Quicksand', 'sans-serif'],
-			accent: ['Rubik', 'sans-serif'],
+			accent: ['Rubik', ...defaultTheme.fontFamily.sans],
 		},
-		extend: {},
+		extend: {
+			fontFamily: {
+				sans: ['Quicksand', ...defaultTheme.fontFamily.sans],
+			},
+		},
 	},
 	variants: {
 		extend: {},

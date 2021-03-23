@@ -2,8 +2,8 @@ import { useState, useReducer } from 'react';
 import { Form } from 'semantic-ui-react';
 import axios from 'axios';
 
-//	Global state
-import { recipeStore } from '../../zustand';
+//	Reducers
+import manualFormReducer from '../../reducers/manualFormReducer';
 
 const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
 
@@ -23,42 +23,7 @@ const initialFormState = {
 	},
 };
 
-const manualFormReducer = (state, action) => {
-	switch (action.type) {
-		case 'HANDLE_INPUT_TEXT':
-			return {
-				...state,
-				[action.field]: action.payload,
-			};
-		case 'HANDLE_INPUT_CHECK':
-			return {
-				...state,
-				checkboxes: { ...state.checkboxes, [action.field]: true },
-			};
-		default:
-			return state;
-	}
-};
-
-const AddRecipeManual = () => {
-	// //	State
-	// const title = recipeStore(state => state.title);
-	// const indivIngredient = recipeStore(state => state.indivIngredient);
-
-	// const titleSaved = recipeStore(state => state.titleSaved);
-	// const ingr = recipeStore(state => state.ingr);
-
-	// //	State functions
-	// const updateTitle = recipeStore(state => state.updateTitle);
-	// const updateIndivIngredient = recipeStore(
-	// 	state => state.updateIndivIngredient
-	// );
-	// const updateIngr = recipeStore(state => state.updateIngr);
-	// const setRecipeTitle = recipeStore(state => state.setRecipeTitle);
-	// const resetRecipeState = recipeStore(state => state.resetRecipeState);
-
-	// const setRecipeData = recipeStore(state => state.setRecipeData);
-
+const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 	//	State
 	const [state, dispatch] = useReducer(manualFormReducer, initialFormState);
 
@@ -70,26 +35,56 @@ const AddRecipeManual = () => {
 		});
 	};
 
-	const handleCheckboxChange = e => {
-		console.log(e);
-		// dispatch({
-		// 	type: 'HANDLE_INPUT_CHECK',
-		// 	field: e.target.name,
-		// 	payload: e.target.value,
-		// });
+	const handleCheckboxChange = (e, data) => {
+		dispatch({
+			type: 'HANDLE_INPUT_CHECK',
+			field: data.value,
+			payload: data.checked,
+		});
 	};
 
-	const submitHandler = async () => {
-		const data = await axios({
-			method: 'post',
-			url: edamamURL,
-			data: { title: titleSaved, ingr: ingr },
+	const handleSubmit = () => {
+		const instructions = state.instructions.length
+			? state.instructions.split('\n')
+			: [];
+		const ingredients = state.ingredients.split('\n');
+		recipeDataDispatch({
+			type: 'SEARCH_DATA_SUCCESS',
+			payload: {
+				instructions: instructions,
+				cookingMinutes: '',
+				extendedIngredients: ingredients,
+				image: state.imageLink,
+				servings: state.servings,
+				title: state.recipeName,
+				summary: '',
+				preparationMinutes: '',
+				readyInMinutes: state.totalTime,
+				info: {
+					vegetarian: state.checkboxes.vegetarian,
+					vegan: state.checkboxes.vegan,
+					sustainable: state.checkboxes.sustainable,
+					veryHealthy: '',
+					pricePerServing: '',
+					glutenFree: state.checkboxes.glutenFree,
+					dairyFree: state.checkboxes.dairyFree,
+				},
+			},
 		});
-		setRecipeData(data);
 	};
+
+	// const submitHandler = async () => {
+	// 	const data = await axios({
+	// 		method: 'post',
+	// 		url: edamamURL,
+	// 		data: { title: titleSaved, ingr: ingr },
+	// 	});
+	// 	setRecipeData(data);
+	// };
 
 	const handleStateShow = () => {
 		console.log(state);
+		console.log(recipeDataState);
 	};
 
 	return (
@@ -97,7 +92,7 @@ const AddRecipeManual = () => {
 			<div className="title ">
 				<h3 onClick={handleStateShow}>Enter the recipe manually:</h3>
 			</div>
-			<Form>
+			<Form onSubmit={handleSubmit}>
 				<Form.Input
 					fluid
 					onChange={handleTextChange}
@@ -109,8 +104,8 @@ const AddRecipeManual = () => {
 					onChange={handleTextChange}
 					name="ingredients"
 					label="Ingredients - enter each ingredient on a new line"
-					placeholder="500g tomatoes,
-2 glugs of oil,
+					placeholder="500g tomatoes
+2 glugs of oil
 6 chickens"
 				/>
 				<h4>Optional info</h4>
@@ -134,8 +129,8 @@ const AddRecipeManual = () => {
 					onChange={handleTextChange}
 					name="instructions"
 					label="Instructions - enter each step on a new line"
-					placeholder="Cut the tomatoes,
-Oil the pan,
+					placeholder="Cut the tomatoes
+Oil the pan
 Skin the carrots"
 				/>
 				<Form.Input
@@ -147,14 +142,39 @@ Skin the carrots"
 				<Form.Group widths="equal">
 					<Form.Checkbox
 						onChange={handleCheckboxChange}
+						checked={state.checkboxes.vegetarian}
 						fluid
 						label="Vegetarian"
 						value="vegetarian"
 					/>
-					<Form.Checkbox fluid label="Vegan" value="vegan" />
-					<Form.Checkbox fluid label="Dairy free" value="dairyFree" />
-					<Form.Checkbox fluid label="Gluten free" value="glutenFree" />
-					<Form.Checkbox fluid label="Sustainable" value="sustainable" />
+					<Form.Checkbox
+						onChange={handleCheckboxChange}
+						checked={state.checkboxes.vegan}
+						fluid
+						label="Vegan"
+						value="vegan"
+					/>
+					<Form.Checkbox
+						onChange={handleCheckboxChange}
+						checked={state.checkboxes.dairyFree}
+						fluid
+						label="Dairy free"
+						value="dairyFree"
+					/>
+					<Form.Checkbox
+						onChange={handleCheckboxChange}
+						checked={state.checkboxes.glutenFree}
+						fluid
+						label="Gluten free"
+						value="glutenFree"
+					/>
+					<Form.Checkbox
+						onChange={handleCheckboxChange}
+						checked={state.checkboxes.sustainable}
+						fluid
+						label="Sustainable"
+						value="sustainable"
+					/>
 				</Form.Group>
 				<Form.Button>ADD RECIPE</Form.Button>
 			</Form>

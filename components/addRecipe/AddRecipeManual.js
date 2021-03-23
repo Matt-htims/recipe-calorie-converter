@@ -71,6 +71,7 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 				},
 			},
 		});
+		dispatch({ type: 'RESET_FORM_STATE' });
 	};
 
 	// const submitHandler = async () => {
@@ -175,8 +176,8 @@ Skin the carrots"
 						label="Sustainable"
 						value="sustainable"
 					/>
+					<Form.Button>ADD RECIPE</Form.Button>
 				</Form.Group>
-				<Form.Button>ADD RECIPE</Form.Button>
 			</Form>
 		</div>
 	);

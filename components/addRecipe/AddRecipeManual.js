@@ -95,13 +95,14 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 			</div>
 			<Form onSubmit={handleSubmit}>
 				<Form.Input
-					fluid
+					value={state.recipeName}
 					onChange={handleTextChange}
 					name="recipeName"
 					label="Recipe name"
 					placeholder="pizza"
 				/>
 				<Form.TextArea
+					value={state.ingredients}
 					onChange={handleTextChange}
 					name="ingredients"
 					label="Ingredients - enter each ingredient on a new line"
@@ -112,21 +113,24 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 				<h4>Optional info</h4>
 				<Form.Group widths="equal">
 					<Form.Input
+						fluid
+						value={state.servings}
 						onChange={handleTextChange}
 						name="servings"
-						fluid
 						label="Servings"
 						placeholder="4"
 					/>
 					<Form.Input
+						fluid
+						value={state.totalTime}
 						onChange={handleTextChange}
 						name="totalTime"
-						fluid
 						label="Total time (mins)"
 						placeholder="25"
 					/>
 				</Form.Group>
 				<Form.TextArea
+					value={state.instructions}
 					onChange={handleTextChange}
 					name="instructions"
 					label="Instructions - enter each step on a new line"
@@ -135,6 +139,7 @@ Oil the pan
 Skin the carrots"
 				/>
 				<Form.Input
+					value={state.imageLink}
 					onChange={handleTextChange}
 					name="imageLink"
 					label="Image link"
@@ -142,37 +147,37 @@ Skin the carrots"
 				/>
 				<Form.Group widths="equal">
 					<Form.Checkbox
+						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.vegetarian}
-						fluid
 						label="Vegetarian"
 						value="vegetarian"
 					/>
 					<Form.Checkbox
+						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.vegan}
-						fluid
 						label="Vegan"
 						value="vegan"
 					/>
 					<Form.Checkbox
+						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.dairyFree}
-						fluid
 						label="Dairy free"
 						value="dairyFree"
 					/>
 					<Form.Checkbox
+						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.glutenFree}
-						fluid
 						label="Gluten free"
 						value="glutenFree"
 					/>
 					<Form.Checkbox
+						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.sustainable}
-						fluid
 						label="Sustainable"
 						value="sustainable"
 					/>

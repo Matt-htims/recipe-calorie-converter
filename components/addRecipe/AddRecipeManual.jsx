@@ -1,18 +1,22 @@
 import { useState, useReducer } from 'react';
 import { Form } from 'semantic-ui-react';
 import axios from 'axios';
+import {useRouter} from 'next/router'
 
 //	Reducers
 import manualFormReducer from '../../reducers/manualFormReducer';
+
+//	Zustand state
+import {enteredRecipeStore} from '../../zustand'
 
 const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
 
 const initialFormState = {
 	recipeName: '',
-	ingredients: [],
+	ingredients: '',
 	servings: '',
 	totalTime: '',
-	instructions: [],
+	instructions: '',
 	imageLink: '',
 	checkboxes: {
 		dairyFree: false,
@@ -24,6 +28,12 @@ const initialFormState = {
 };
 
 const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
+	const router = useRouter()
+
+	//	New Recipe state
+	const actions = enteredRecipeStore(s => s.actions)
+	const zustandState = enteredRecipeStore()
+
 	//	State
 	const [state, dispatch] = useReducer(manualFormReducer, initialFormState);
 
@@ -44,34 +54,34 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 	};
 
 	const handleSubmit = () => {
+		actions.searchDataRequest()
 		const instructions = state.instructions.length
 			? state.instructions.split('\n')
 			: [];
 		const ingredients = state.ingredients.split('\n');
-		recipeDataDispatch({
-			type: 'SEARCH_DATA_SUCCESS',
-			payload: {
-				instructions: instructions,
-				cookingMinutes: '',
-				extendedIngredients: ingredients,
-				image: state.imageLink,
-				servings: state.servings,
-				title: state.recipeName,
-				summary: '',
-				preparationMinutes: '',
-				readyInMinutes: state.totalTime,
-				info: {
-					vegetarian: state.checkboxes.vegetarian,
-					vegan: state.checkboxes.vegan,
-					sustainable: state.checkboxes.sustainable,
-					veryHealthy: '',
-					pricePerServing: '',
-					glutenFree: state.checkboxes.glutenFree,
-					dairyFree: state.checkboxes.dairyFree,
-				},
-			},
-		});
+		const manuallyAddedRecipe = {
+			instructions: instructions,
+			cookingMinutes: '',
+			extendedIngredients: ingredients,
+			image: state.imageLink,
+			servings: state.servings,
+			title: state.recipeName,
+			summary: '',
+			preparationMinutes: '',
+			readyInMinutes: state.totalTime,
+			info: {
+				vegetarian: state.checkboxes.vegetarian,
+				vegan: state.checkboxes.vegan,
+				sustainable: state.checkboxes.sustainable,
+				veryHealthy: '',
+				pricePerServing: '',
+				glutenFree: state.checkboxes.glutenFree,
+				dairyFree: state.checkboxes.dairyFree,
+			}
+		}
+		actions.searchDataSuccess(manuallyAddedRecipe)
 		dispatch({ type: 'RESET_FORM_STATE' });
+		router.push('/recipes/edit')
 	};
 
 	// const submitHandler = async () => {
@@ -84,8 +94,8 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 	// };
 
 	const handleStateShow = () => {
+		console.log(zustandState);
 		console.log(state);
-		console.log(recipeDataState);
 	};
 
 	return (
@@ -147,35 +157,30 @@ Skin the carrots"
 				/>
 				<Form.Group widths="equal">
 					<Form.Checkbox
-						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.vegetarian}
 						label="Vegetarian"
 						value="vegetarian"
 					/>
 					<Form.Checkbox
-						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.vegan}
 						label="Vegan"
 						value="vegan"
 					/>
 					<Form.Checkbox
-						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.dairyFree}
 						label="Dairy free"
 						value="dairyFree"
 					/>
 					<Form.Checkbox
-						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.glutenFree}
 						label="Gluten free"
 						value="glutenFree"
 					/>
 					<Form.Checkbox
-						fluid
 						onChange={handleCheckboxChange}
 						checked={state.checkboxes.sustainable}
 						label="Sustainable"

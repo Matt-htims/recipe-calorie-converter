@@ -1,48 +1,55 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Input, Form, Button } from 'semantic-ui-react';
+import {useRouter} from 'next/router'
 
-import { linkRecipeStore, recipeStore } from '../../zustand';
+//	Zustand state
+import {enteredRecipeStore} from '../../zustand'
+
 const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
 
-const AddRecipeSearch = ({ recipeDataState, recipeDataDispatch }) => {
+const AddRecipeSearch = () => {
+	const router = useRouter()
 	//  State
 	const [recipeURL, setRecipeURL] = useState('');
 
+	//	New Recipe state
+	const actions = enteredRecipeStore(s => s.actions)
+
 	//  Handlers
 	const submitHandler = async () => {
-		recipeDataDispatch({ type: 'SEARCH_DATA_REQUEST' });
+		actions.searchDataRequest()
 		axios(
 			`https://api.spoonacular.com/recipes/extract?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_KEY}&url=${recipeURL}`
 		)
 			.then(response => {
 				const { data } = response;
-				recipeDataDispatch({
-					type: 'SEARCH_DATA_SUCCESS',
-					payload: {
-						instructions: data.analyzedInstructions[0].steps,
-						cookingMinutes: data.cookingMinutes,
-						extendedIngredients: data.extendedIngredients,
-						image: data.image,
-						servings: data.servings,
-						title: data.title,
-						summary: data.summary,
-						preparationMinutes: data.preparationMinutes,
-						readyInMinutes: data.readyInMinutes,
-						info: {
-							vegetarian: data.vegetarian,
-							vegan: data.vegan,
-							sustainable: data.sustainable,
-							veryHealthy: data.veryHealthy,
-							pricePerServing: data.pricePerServing,
-							glutenFree: data.glutenFree,
-							dairyFree: data.dairyFree,
-						},
+				const searchRecipe = {
+					instructions: data.analyzedInstructions[0].steps,
+					cookingMinutes: data.cookingMinutes,
+					extendedIngredients: data.extendedIngredients,
+					image: data.image,
+					servings: data.servings,
+					title: data.title,
+					summary: data.summary,
+					preparationMinutes: data.preparationMinutes,
+					readyInMinutes: data.readyInMinutes,
+					info: {
+						vegetarian: data.vegetarian,
+						vegan: data.vegan,
+						sustainable: data.sustainable,
+						veryHealthy: data.veryHealthy,
+						pricePerServing: data.pricePerServing,
+						glutenFree: data.glutenFree,
+						dairyFree: data.dairyFree,
 					},
-				});
+				}
+				actions.searchDataSuccess(searchRecipe)
+				setRecipeURL('');
+				router.push('/recipes/edit')
 			})
 			.catch(err => {
-				recipeDataDispatch({ type: 'SEARCH_DATA_FAILURE' });
+				actions.searchDataFailure()
 				if (err.response) {
 					//	Client received an error resonse (5xx, 4xx)
 				} else if (err.request) {
@@ -51,7 +58,8 @@ const AddRecipeSearch = ({ recipeDataState, recipeDataDispatch }) => {
 					//	Anything else
 				}
 			});
-		setRecipeURL('');
+		
+		
 	};
 
 	const getCaloriesHandler = async () => {
@@ -61,10 +69,6 @@ const AddRecipeSearch = ({ recipeDataState, recipeDataDispatch }) => {
 			data: formattedData,
 		});
 		setRecipeData(data);
-	};
-
-	const showHandler = () => {
-		console.log(searchDataState);
 	};
 
 	return (
@@ -81,22 +85,6 @@ const AddRecipeSearch = ({ recipeDataState, recipeDataDispatch }) => {
 				</Form.Field>
 				<Button type="submit">Search</Button>
 			</Form>
-			<div onClick={showHandler} className="">
-				show recipe data
-				<div className="">
-					<ul>
-						{recipeDataState.recipe.ingredients &&
-							recipeDataState.recipe.ingredients.map(ingredient => (
-								<li>{ingredient}</li>
-							))}
-					</ul>
-					<img
-						src={recipeDataState.recipe.image && recipeDataState.recipe.image}
-						alt=""
-					/>
-				</div>
-			</div>
-			<Button onClick={getCaloriesHandler}>Analyse</Button>
 		</div>
 	);
 };

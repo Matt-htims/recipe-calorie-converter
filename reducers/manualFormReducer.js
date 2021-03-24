@@ -13,10 +13,10 @@ const manualFormReducer = (state, action) => {
 		case 'RESET_FORM_STATE':
 			return {
 				recipeName: '',
-				ingredients: [],
+				ingredients: '',
 				servings: '',
 				totalTime: '',
-				instructions: [],
+				instructions: '',
 				imageLink: '',
 				checkboxes: {
 					dairyFree: false,

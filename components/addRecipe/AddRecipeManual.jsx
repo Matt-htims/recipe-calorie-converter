@@ -81,7 +81,7 @@ const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
 		}
 		actions.searchDataSuccess(manuallyAddedRecipe)
 		dispatch({ type: 'RESET_FORM_STATE' });
-		router.push('/recipes/edit')
+		router.push('/recipes/confirm')
 	};
 
 	// const submitHandler = async () => {

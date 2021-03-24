@@ -46,7 +46,7 @@ const AddRecipeSearch = () => {
 				}
 				actions.searchDataSuccess(searchRecipe)
 				setRecipeURL('');
-				router.push('/recipes/edit')
+				router.push('/recipes/confirm')
 			})
 			.catch(err => {
 				actions.searchDataFailure()

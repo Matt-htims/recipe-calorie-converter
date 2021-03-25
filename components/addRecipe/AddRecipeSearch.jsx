@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { Input, Form, Button } from 'semantic-ui-react';
-import {useRouter} from 'next/router'
+import { useState } from "react";
+import axios from "axios";
+import { Input, Form, Button } from "semantic-ui-react";
+import { useRouter } from "next/router";
 
 //	Zustand state
-import {enteredRecipeStore} from '../../zustand'
+import { enteredRecipeStore } from "../../zustand";
 
 const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
 
 const AddRecipeSearch = () => {
-	const router = useRouter()
+	const router = useRouter();
 	//  State
-	const [recipeURL, setRecipeURL] = useState('');
+	const [recipeURL, setRecipeURL] = useState("");
 
 	//	New Recipe state
-	const actions = enteredRecipeStore(s => s.actions)
+	const actions = enteredRecipeStore(s => s.actions);
 
 	//  Handlers
 	const submitHandler = async () => {
-		actions.searchDataRequest()
+		actions.searchDataRequest();
 		axios(
 			`https://api.spoonacular.com/recipes/extract?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_KEY}&url=${recipeURL}`
 		)
@@ -43,13 +43,13 @@ const AddRecipeSearch = () => {
 						glutenFree: data.glutenFree,
 						dairyFree: data.dairyFree,
 					},
-				}
-				actions.searchDataSuccess(searchRecipe)
-				setRecipeURL('');
-				router.push('/recipes/confirm')
+				};
+				actions.searchDataSuccess(searchRecipe);
+				setRecipeURL("");
+				router.push("/recipes/confirm");
 			})
 			.catch(err => {
-				actions.searchDataFailure()
+				actions.searchDataFailure();
 				if (err.response) {
 					//	Client received an error resonse (5xx, 4xx)
 				} else if (err.request) {
@@ -58,13 +58,11 @@ const AddRecipeSearch = () => {
 					//	Anything else
 				}
 			});
-		
-		
 	};
 
 	const getCaloriesHandler = async () => {
 		const data = await axios({
-			method: 'post',
+			method: "post",
 			url: edamamURL,
 			data: formattedData,
 		});

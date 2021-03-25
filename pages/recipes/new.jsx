@@ -1,8 +1,6 @@
-
-
 //	Components
-import AddRecipeManual from '../../components/addRecipe/AddRecipeManual';
-import AddRecipeSearch from '../../components/addRecipe/AddRecipeSearch';
+import AddRecipeManual from "../../components/addRecipe/AddRecipeManual";
+import AddRecipeSearch from "../../components/addRecipe/AddRecipeSearch";
 
 const NewRecipe = () => {
 	return (

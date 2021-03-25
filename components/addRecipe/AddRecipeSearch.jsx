@@ -1,17 +1,17 @@
-import { useState } from "react";
-import axios from "axios";
-import { Input, Form, Button } from "semantic-ui-react";
-import { useRouter } from "next/router";
+import { useState } from 'react';
+import axios from 'axios';
+import { Input, Form, Button } from 'semantic-ui-react';
+import { useRouter } from 'next/router';
 
 //	Zustand state
-import { enteredRecipeStore } from "../../zustand";
+import { enteredRecipeStore } from '../../zustand';
 
 const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
 
 const AddRecipeSearch = () => {
 	const router = useRouter();
 	//  State
-	const [recipeURL, setRecipeURL] = useState("");
+	const [recipeURL, setRecipeURL] = useState('');
 
 	//	New Recipe state
 	const actions = enteredRecipeStore(s => s.actions);
@@ -45,8 +45,8 @@ const AddRecipeSearch = () => {
 					},
 				};
 				actions.searchDataSuccess(searchRecipe);
-				setRecipeURL("");
-				router.push("/recipes/confirm");
+				setRecipeURL('');
+				router.push('/recipes/confirm');
 			})
 			.catch(err => {
 				actions.searchDataFailure();
@@ -62,7 +62,7 @@ const AddRecipeSearch = () => {
 
 	const getCaloriesHandler = async () => {
 		const data = await axios({
-			method: "post",
+			method: 'post',
 			url: edamamURL,
 			data: formattedData,
 		});
@@ -71,7 +71,7 @@ const AddRecipeSearch = () => {
 
 	return (
 		<div>
-			<h1>Search here</h1>
+			<h2 className="font-sans font-medium">Search here</h2>
 			<Form onSubmit={submitHandler}>
 				<Form.Field>
 					<Input

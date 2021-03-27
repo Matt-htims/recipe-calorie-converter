@@ -25,6 +25,8 @@ module.exports = {
 				900: '#343A40',
 				1000: '#21252A',
 			},
+			red: '#FF7067',
+			amber: '#F5BF6E',
 		},
 		fontFamily: {
 			accent: ['Rubik', ...defaultTheme.fontFamily.sans],

@@ -25,7 +25,8 @@ const AddRecipeSearch = () => {
 			.then(response => {
 				const { data } = response;
 				const searchRecipe = {
-					instructions: data.analyzedInstructions[0].steps,
+					instructions: [],
+					extendedInstructions: data.analyzedInstructions[0].steps,
 					cookingMinutes: data.cookingMinutes,
 					extendedIngredients: data.extendedIngredients,
 					image: data.image,
@@ -71,17 +72,20 @@ const AddRecipeSearch = () => {
 
 	return (
 		<div>
-			<h2 className="font-sans font-medium">Search here</h2>
+			<h2 className="font-sans font-medium text-xl md:text-3xl">
+				Paste the link to a recipe and we'll add it for you!
+			</h2>
+			<div className="w-6/12"></div>
 			<Form onSubmit={submitHandler}>
-				<Form.Field>
-					<Input
-						onChange={e => setRecipeURL(e.target.value)}
-						value={recipeURL}
-						icon="search"
-						placeholder="Search..."
-					></Input>
-				</Form.Field>
-				<Button type="submit">Search</Button>
+				<Form.Input
+					onChange={e => setRecipeURL(e.target.value)}
+					value={recipeURL}
+					placeholder="Recipe url..."
+					action={{
+						color: 'vk',
+						content: 'Add',
+					}}
+				></Form.Input>
 			</Form>
 		</div>
 	);

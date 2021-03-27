@@ -1,15 +1,11 @@
-import { useState, useReducer } from 'react';
-import { Form } from 'semantic-ui-react';
-import axios from 'axios';
-import {useRouter} from 'next/router'
-
-//	Reducers
-import manualFormReducer from '../../reducers/manualFormReducer';
+import React from 'react';
+import { Formik, Field } from 'formik';
+import * as yup from 'yup';
+import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { useRouter } from 'next/router';
 
 //	Zustand state
-import {enteredRecipeStore} from '../../zustand'
-
-const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
+import { enteredRecipeStore } from '../../zustand';
 
 const initialFormState = {
 	recipeName: '',
@@ -18,178 +14,237 @@ const initialFormState = {
 	totalTime: '',
 	instructions: '',
 	imageLink: '',
-	checkboxes: {
-		dairyFree: false,
-		glutenFree: false,
-		sustainable: false,
-		vegetarian: false,
-		vegan: false,
-	},
+	dairyFree: false,
+	glutenFree: false,
+	sustainable: false,
+	vegetarian: false,
+	vegan: false,
 };
 
-const AddRecipeManual = ({ recipeDataState, recipeDataDispatch }) => {
-	const router = useRouter()
+const yupValidation = yup.object().shape({
+	recipeName: yup.string().required('This field is required'),
+	ingredients: yup.string().required('This field is required'),
+	servings: yup.number().typeError('Must be a number'),
+	totalTime: yup.number().typeError('Must be a number'),
+	instructions: yup.string(),
+	imageLink: yup.string(),
+});
+
+const AddRecipeManual = () => {
+	const router = useRouter();
 
 	//	New Recipe state
-	const actions = enteredRecipeStore(s => s.actions)
-	const zustandState = enteredRecipeStore()
-
-	//	State
-	const [state, dispatch] = useReducer(manualFormReducer, initialFormState);
-
-	const handleTextChange = e => {
-		dispatch({
-			type: 'HANDLE_INPUT_TEXT',
-			field: e.target.name,
-			payload: e.target.value,
-		});
-	};
-
-	const handleCheckboxChange = (e, data) => {
-		dispatch({
-			type: 'HANDLE_INPUT_CHECK',
-			field: data.value,
-			payload: data.checked,
-		});
-	};
-
-	const handleSubmit = () => {
-		actions.searchDataRequest()
-		const instructions = state.instructions.length
-			? state.instructions.split('\n')
-			: [];
-		const ingredients = state.ingredients.split('\n');
-		const manuallyAddedRecipe = {
-			instructions: instructions,
-			cookingMinutes: '',
-			extendedIngredients: ingredients,
-			image: state.imageLink,
-			servings: state.servings,
-			title: state.recipeName,
-			summary: '',
-			preparationMinutes: '',
-			readyInMinutes: state.totalTime,
-			info: {
-				vegetarian: state.checkboxes.vegetarian,
-				vegan: state.checkboxes.vegan,
-				sustainable: state.checkboxes.sustainable,
-				veryHealthy: '',
-				pricePerServing: '',
-				glutenFree: state.checkboxes.glutenFree,
-				dairyFree: state.checkboxes.dairyFree,
-			}
-		}
-		actions.searchDataSuccess(manuallyAddedRecipe)
-		dispatch({ type: 'RESET_FORM_STATE' });
-		router.push('/recipes/confirm')
-	};
-
-	// const submitHandler = async () => {
-	// 	const data = await axios({
-	// 		method: 'post',
-	// 		url: edamamURL,
-	// 		data: { title: titleSaved, ingr: ingr },
-	// 	});
-	// 	setRecipeData(data);
-	// };
-
-	const handleStateShow = () => {
-		console.log(zustandState);
-		console.log(state);
-	};
+	const actions = enteredRecipeStore(s => s.actions);
+	const zustandState = enteredRecipeStore();
 
 	return (
-		<div>
-			<div className="title ">
-				<h3 onClick={handleStateShow}>Enter the recipe manually:</h3>
-			</div>
-			<Form onSubmit={handleSubmit}>
-				<Form.Input
-					value={state.recipeName}
-					onChange={handleTextChange}
-					name="recipeName"
-					label="Recipe name"
-					placeholder="pizza"
-				/>
-				<Form.TextArea
-					value={state.ingredients}
-					onChange={handleTextChange}
-					name="ingredients"
-					label="Ingredients - enter each ingredient on a new line"
-					placeholder="500g tomatoes
+		<>
+			<Formik
+				initialValues={initialFormState}
+				onSubmit={(values, { resetForm }) => {
+					console.log(values);
+					actions.searchDataRequest();
+					const instructions = values.instructions.length
+						? values.instructions.split('\n')
+						: [];
+					const ingredients = values.ingredients.split('\n');
+					const manuallyAddedRecipe = {
+						instructions: instructions,
+						extendedInstructions: [],
+						cookingMinutes: '',
+						extendedIngredients: [],
+						ingredients,
+						image: values.imageLink,
+						servings: values.servings,
+						title: values.recipeName,
+						summary: '',
+						preparationMinutes: '',
+						readyInMinutes: values.totalTime,
+						info: {
+							vegetarian: values.vegetarian ? true : false,
+							vegan: values.vegan ? true : false,
+							sustainable: values.sustainable ? true : false,
+							veryHealthy: '',
+							pricePerServing: '',
+							glutenFree: values.glutenFree ? true : false,
+							dairyFree: values.dairyFree ? true : false,
+						},
+					};
+					actions.searchDataSuccess(manuallyAddedRecipe);
+					router.push('/recipes/confirm');
+					resetForm();
+				}}
+				validationSchema={yupValidation}
+			>
+				{({
+					values,
+					errors,
+					touched,
+					handleChange,
+					handleBlur,
+					handleSubmit,
+				}) => {
+					return (
+						<Form>
+							<Form.Input
+								label="Recipe name"
+								placeholder="Pizza"
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="recipeName"
+								value={values.recipeName}
+								error={
+									touched.recipeName &&
+									errors.recipeName && {
+										content: errors.recipeName,
+										pointing: 'above',
+									}
+								}
+							/>
+
+							<Form.TextArea
+								label="Ingredients - enter each ingredient on a new line"
+								placeholder="500g tomatoes
 2 glugs of oil
 6 chickens"
-				/>
-				<h4>Optional info</h4>
-				<Form.Group widths="equal">
-					<Form.Input
-						fluid
-						value={state.servings}
-						onChange={handleTextChange}
-						name="servings"
-						label="Servings"
-						placeholder="4"
-					/>
-					<Form.Input
-						fluid
-						value={state.totalTime}
-						onChange={handleTextChange}
-						name="totalTime"
-						label="Total time (mins)"
-						placeholder="25"
-					/>
-				</Form.Group>
-				<Form.TextArea
-					value={state.instructions}
-					onChange={handleTextChange}
-					name="instructions"
-					label="Instructions - enter each step on a new line"
-					placeholder="Cut the tomatoes
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="ingredients"
+								value={values.ingredients}
+								error={
+									touched.ingredients &&
+									errors.ingredients && {
+										content: errors.ingredients,
+										pointing: 'above',
+									}
+								}
+							/>
+
+							<h4 className="font-sans font-medium text-xl">Optional info</h4>
+							<Form.Group widths="equal">
+								<Form.Input
+									fluid
+									value={values.servings}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									name="servings"
+									label="Servings"
+									placeholder="4"
+									error={
+										touched.servings &&
+										errors.servings && {
+											content: errors.servings,
+											pointing: 'above',
+										}
+									}
+								/>
+
+								<Form.Input
+									fluid
+									value={values.totalTime}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									name="totalTime"
+									label="Total time (mins)"
+									placeholder="25"
+									error={
+										touched.totalTime &&
+										errors.totalTime && {
+											content: errors.totalTime,
+											pointing: 'above',
+										}
+									}
+								/>
+							</Form.Group>
+							<Form.TextArea
+								value={values.instructions}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="instructions"
+								label="Instructions - enter each step on a new line"
+								placeholder="Cut the tomatoes
 Oil the pan
 Skin the carrots"
-				/>
-				<Form.Input
-					value={state.imageLink}
-					onChange={handleTextChange}
-					name="imageLink"
-					label="Image link"
-					placeholder="https://thatlovelyimagewebsite.com/image-2"
-				/>
-				<Form.Group widths="equal">
-					<Form.Checkbox
-						onChange={handleCheckboxChange}
-						checked={state.checkboxes.vegetarian}
-						label="Vegetarian"
-						value="vegetarian"
-					/>
-					<Form.Checkbox
-						onChange={handleCheckboxChange}
-						checked={state.checkboxes.vegan}
-						label="Vegan"
-						value="vegan"
-					/>
-					<Form.Checkbox
-						onChange={handleCheckboxChange}
-						checked={state.checkboxes.dairyFree}
-						label="Dairy free"
-						value="dairyFree"
-					/>
-					<Form.Checkbox
-						onChange={handleCheckboxChange}
-						checked={state.checkboxes.glutenFree}
-						label="Gluten free"
-						value="glutenFree"
-					/>
-					<Form.Checkbox
-						onChange={handleCheckboxChange}
-						checked={state.checkboxes.sustainable}
-						label="Sustainable"
-						value="sustainable"
-					/>
-					<Form.Button>ADD RECIPE</Form.Button>
-				</Form.Group>
-			</Form>
-		</div>
+								error={
+									touched.instructions &&
+									errors.instructions && {
+										content: errors.instructions,
+										pointing: 'above',
+									}
+								}
+							/>
+
+							<Form.Input
+								value={values.imageLink}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="imageLink"
+								label="Image link"
+								placeholder="https://thatlovelyimagewebsite.com/image-2"
+								error={
+									touched.imageLink &&
+									errors.imageLink && {
+										content: errors.imageLink,
+										pointing: 'above',
+									}
+								}
+							/>
+
+							<div className="checkboxes md:flex justify-between">
+								<label className="flex items-center cursor-pointer">
+									<div className="field pr-2 pt-1">
+										<Field
+											type="checkbox"
+											name="vegetarian"
+											value="vegetarian"
+										/>
+									</div>
+									Vegetarian
+								</label>
+								<label className="flex items-center cursor-pointer">
+									<div className="field pr-2 pt-1">
+										<Field type="checkbox" name="vegan" value="vegan" />
+									</div>
+									Vegan
+								</label>
+								<label className="flex items-center cursor-pointer">
+									<div className="field pr-2 pt-1">
+										<Field type="checkbox" name="dairyFree" value="dairyFree" />
+									</div>
+									Dairy free
+								</label>
+								<label className="flex items-center cursor-pointer">
+									<div className="field pr-2 pt-1">
+										<Field
+											type="checkbox"
+											name="glutenFree"
+											value="glutenFree"
+										/>
+									</div>
+									Gluten free
+								</label>
+								<label className="flex items-center cursor-pointer">
+									<div className="field pr-2 pt-1">
+										<Field
+											type="checkbox"
+											name="sustainable"
+											value="sustainable"
+										/>
+									</div>
+									Sustainable
+								</label>
+							</div>
+
+							<div className="flex justify-center mt-14">
+								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+									Add
+								</Form.Button>
+							</div>
+						</Form>
+					);
+				}}
+			</Formik>
+		</>
 	);
 };
 

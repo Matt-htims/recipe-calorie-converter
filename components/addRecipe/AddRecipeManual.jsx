@@ -48,6 +48,7 @@ const AddRecipeManual = () => {
 						: [];
 					const ingredients = values.ingredients.split('\n');
 					const manuallyAddedRecipe = {
+						populated: true,
 						instructions: instructions,
 						extendedInstructions: [],
 						cookingMinutes: '',

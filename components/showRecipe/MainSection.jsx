@@ -69,7 +69,7 @@ const MainSection = ({
 							</h3>
 							<div className="space-y-7">
 								{instructions.map((instruction, index) => (
-									<div className="flex">
+									<div key={`instruction-${index}`} className="flex">
 										<div className="w-3">
 											<p>{`${index + 1}.`}</p>
 										</div>

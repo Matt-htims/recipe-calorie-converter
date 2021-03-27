@@ -11,8 +11,8 @@ const Sidebar = ({ img, ingredients }) => {
 			<div className="ingredients">
 				<h3 className="font-sans font-medium text-xl pb-2">Ingredients</h3>
 				<ul className="text-sm text-gray-900">
-					{ingredients.map(ingredient => (
-						<div className="flex space-x-2">
+					{ingredients.map((ingredient, index) => (
+						<div key={`ingredient-${index}`} className="flex space-x-2">
 							<p>- </p>
 							<li>{ingredient}</li>
 						</div>

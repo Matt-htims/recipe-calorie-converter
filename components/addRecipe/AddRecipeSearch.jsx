@@ -27,6 +27,7 @@ const AddRecipeSearch = () => {
 				.then(response => {
 					const { data } = response;
 					const searchRecipe = {
+						populated: true,
 						instructions: [],
 						extendedInstructions: data.analyzedInstructions[0].steps,
 						cookingMinutes: data.cookingMinutes,

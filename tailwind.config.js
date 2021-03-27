@@ -27,6 +27,7 @@ module.exports = {
 			},
 			red: '#FF7067',
 			amber: '#F5BF6E',
+			white: '#FFFFFF',
 		},
 		fontFamily: {
 			accent: ['Rubik', ...defaultTheme.fontFamily.sans],

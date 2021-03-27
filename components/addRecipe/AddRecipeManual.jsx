@@ -16,7 +16,6 @@ const initialFormState = {
 	imageLink: '',
 	dairyFree: false,
 	glutenFree: false,
-	sustainable: false,
 	vegetarian: false,
 	vegan: false,
 };
@@ -63,7 +62,7 @@ const AddRecipeManual = () => {
 						info: {
 							vegetarian: values.vegetarian ? true : false,
 							vegan: values.vegan ? true : false,
-							sustainable: values.sustainable ? true : false,
+							sustainable: '',
 							veryHealthy: '',
 							pricePerServing: '',
 							glutenFree: values.glutenFree ? true : false,
@@ -197,19 +196,30 @@ Skin the carrots"
 											type="checkbox"
 											name="vegetarian"
 											value="vegetarian"
+											checked={values.vegetarian}
 										/>
 									</div>
 									Vegetarian
 								</label>
 								<label className="flex items-center cursor-pointer">
 									<div className="field pr-2 pt-1">
-										<Field type="checkbox" name="vegan" value="vegan" />
+										<Field
+											type="checkbox"
+											checked={values.vegan}
+											name="vegan"
+											value="vegan"
+										/>
 									</div>
 									Vegan
 								</label>
 								<label className="flex items-center cursor-pointer">
 									<div className="field pr-2 pt-1">
-										<Field type="checkbox" name="dairyFree" value="dairyFree" />
+										<Field
+											type="checkbox"
+											checked={values.dairyFree}
+											name="dairyFree"
+											value="dairyFree"
+										/>
 									</div>
 									Dairy free
 								</label>
@@ -219,19 +229,10 @@ Skin the carrots"
 											type="checkbox"
 											name="glutenFree"
 											value="glutenFree"
+											checked={values.glutenFree}
 										/>
 									</div>
 									Gluten free
-								</label>
-								<label className="flex items-center cursor-pointer">
-									<div className="field pr-2 pt-1">
-										<Field
-											type="checkbox"
-											name="sustainable"
-											value="sustainable"
-										/>
-									</div>
-									Sustainable
 								</label>
 							</div>
 

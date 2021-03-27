@@ -1,6 +1,10 @@
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';
 
+//	Components
+import Sidebar from '../../components/showRecipe/Sidebar';
+import MainSection from '../../components/showRecipe/MainSection';
+
 const ConfirmRecipe = () => {
 	//	Entered Recipe State
 	const isLoading = enteredRecipeStore(state => state.isLoading);
@@ -13,59 +17,39 @@ const ConfirmRecipe = () => {
 			) : isError ? (
 				<h1>Error</h1>
 			) : (
-				<div>
-					<h1>Recipe preview</h1>
-					<div className="left-section">
-						<div className="picture">
-							<img src={recipe.image} alt="recipe image" />
-						</div>
-						<div className="ingredients">
-							<h3>Ingredients</h3>
-							<ul>
-								{recipe.extendedIngredients.length
-									? recipe.extendedIngredients.map(ingredient => (
-											<li>{ingredient.original}</li>
-									  ))
+				<div className="w-11/12 md:w-11/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
+					<h1 className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold">
+						Recipe preview
+					</h1>
+					<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">
+						<Sidebar
+							img={recipe.image ? recipe.image : '/missingImage.svg'}
+							ingredients={
+								recipe.extendedIngredients.length
+									? recipe.extendedIngredients.map(
+											ingredient => ingredient.original
+									  )
 									: recipe.ingredients.length
-									? recipe.ingredients.map(ingredient => <li>{ingredient}</li>)
-									: ''}
-							</ul>
-						</div>
-					</div>
-					<div className="right-section">
-						<h2>{recipe.title}</h2>
-						<div className="recipe-info">
-							<div className="servings-time">
-								<p>{recipe.servings}</p>
-								<p>{`${recipe.readyInMinutes} mins total time`}</p>
-							</div>
-							<div className="icons">
-								<p>icons go here</p>
-							</div>
-						</div>
-						<div className="instructions">
-							<h2>Instructions</h2>
-							<ol>
-								{recipe.extendedInstructions.length
-									? recipe.extendedInstructions.map(instruction => (
-											<li>{instruction.step}</li>
-									  ))
+									? recipe.ingredients.map(ingredient => ingredient)
+									: ''
+							}
+						/>
+
+						<MainSection
+							title={recipe.title}
+							servings={recipe.servings}
+							time={recipe.readyInMinutes}
+							info={recipe.info}
+							instructions={
+								recipe.extendedInstructions.length
+									? recipe.extendedInstructions.map(
+											instruction => instruction.step
+									  )
 									: recipe.instructions.length
-									? recipe.instructions.map(instruction => (
-											<li>{instruction}</li>
-									  ))
-									: ''}
-							</ol>
-						</div>
-						<div className="buttons">
-							<div className="discard-button">
-								<button>discard recipe</button>
-							</div>
-							<div className="edit-save">
-								<button>edit</button>
-								<button>save</button>
-							</div>
-						</div>
+									? recipe.instructions.map(instruction => instruction)
+									: ''
+							}
+						/>
 					</div>
 				</div>
 			)}

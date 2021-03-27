@@ -12,53 +12,65 @@ const AddRecipeSearch = () => {
 	const router = useRouter();
 	//  State
 	const [recipeURL, setRecipeURL] = useState('');
+	const [error, setError] = useState(null);
 
 	//	New Recipe state
 	const actions = enteredRecipeStore(s => s.actions);
 
 	//  Handlers
 	const submitHandler = async () => {
-		actions.searchDataRequest();
-		axios(
-			`https://api.spoonacular.com/recipes/extract?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_KEY}&url=${recipeURL}`
-		)
-			.then(response => {
-				const { data } = response;
-				const searchRecipe = {
-					instructions: [],
-					extendedInstructions: data.analyzedInstructions[0].steps,
-					cookingMinutes: data.cookingMinutes,
-					extendedIngredients: data.extendedIngredients,
-					image: data.image,
-					servings: data.servings,
-					title: data.title,
-					summary: data.summary,
-					preparationMinutes: data.preparationMinutes,
-					readyInMinutes: data.readyInMinutes,
-					info: {
-						vegetarian: data.vegetarian,
-						vegan: data.vegan,
-						sustainable: data.sustainable,
-						veryHealthy: data.veryHealthy,
-						pricePerServing: data.pricePerServing,
-						glutenFree: data.glutenFree,
-						dairyFree: data.dairyFree,
-					},
-				};
-				actions.searchDataSuccess(searchRecipe);
-				setRecipeURL('');
-				router.push('/recipes/confirm');
-			})
-			.catch(err => {
-				actions.searchDataFailure();
-				if (err.response) {
-					//	Client received an error resonse (5xx, 4xx)
-				} else if (err.request) {
-					//	Client never received a response, or request never left
-				} else {
-					//	Anything else
-				}
-			});
+		if (recipeURL) {
+			actions.searchDataRequest();
+			axios(
+				`https://api.spoonacular.com/recipes/extract?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_KEY}&url=${recipeURL}`
+			)
+				.then(response => {
+					const { data } = response;
+					const searchRecipe = {
+						instructions: [],
+						extendedInstructions: data.analyzedInstructions[0].steps,
+						cookingMinutes: data.cookingMinutes,
+						extendedIngredients: data.extendedIngredients,
+						image: data.image,
+						servings: data.servings,
+						title: data.title,
+						summary: data.summary,
+						preparationMinutes: data.preparationMinutes,
+						readyInMinutes: data.readyInMinutes,
+						info: {
+							vegetarian: data.vegetarian,
+							vegan: data.vegan,
+							sustainable: data.sustainable,
+							veryHealthy: data.veryHealthy,
+							pricePerServing: data.pricePerServing,
+							glutenFree: data.glutenFree,
+							dairyFree: data.dairyFree,
+						},
+					};
+					actions.searchDataSuccess(searchRecipe);
+					setRecipeURL('');
+					setError(null);
+					router.push('/recipes/confirm');
+				})
+				.catch(err => {
+					actions.searchDataFailure();
+					if (err.response) {
+						//	Client received an error resonse (5xx, 4xx)
+						console.log(err);
+						setError('That link did not work, please try again');
+					} else if (err.request) {
+						//	Client never received a response, or request never left
+						console.log(err);
+						setError('That link did not work, please try again');
+					} else {
+						//	Anything else
+						console.log(err);
+						setError('That link did not work, please try again');
+					}
+				});
+		} else {
+			console.log('No URL');
+		}
 	};
 
 	const getCaloriesHandler = async () => {
@@ -85,6 +97,7 @@ const AddRecipeSearch = () => {
 						color: 'vk',
 						content: 'Add',
 					}}
+					error={error && { content: error, pointing: 'above' }}
 				></Form.Input>
 			</Form>
 		</div>

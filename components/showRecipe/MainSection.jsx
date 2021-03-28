@@ -9,6 +9,7 @@ const MainSection = ({
 	instructions,
 	nutrition,
 	info,
+	openDelete,
 }) => {
 	return (
 		<div className="md:w-3/4">
@@ -82,7 +83,9 @@ const MainSection = ({
 				</div>
 				<div className="buttons flex justify-between md:ml-11 md:mr-11">
 					<div className="discard">
-						<Button basic>DISCARD</Button>
+						<Button onClick={openDelete} basic>
+							DISCARD
+						</Button>
 					</div>
 					<div className="edit-save flex md:block md:space-x-4">
 						<Button secondary>EDIT</Button>

@@ -1,24 +1,24 @@
-import create from "zustand";
-import { devtools } from "zustand/middleware";
+import create from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 const recipeInitialState = {
-	cookingMinutes: "",
+	cookingMinutes: '',
 	extendedIngredients: [],
-	image: "",
+	image: '',
 	instructions: [],
-	preparationMinutes: "",
-	readyInMinutes: "",
-	servings: "",
-	summary: "",
-	title: "",
+	preparationMinutes: '',
+	readyInMinutes: '',
+	servings: '',
+	summary: '',
+	title: '',
 	info: {
 		vegetarian: false,
 		dairyFree: false,
 		glutenFree: false,
-		pricePerServing: "",
+		pricePerServing: '',
 		sustainable: false,
 		vegan: false,
-		veryHealthy: true,
+		veryHealthy: false,
 	},
 };
 

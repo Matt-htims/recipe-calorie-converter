@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
-import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
 //	Zustand state

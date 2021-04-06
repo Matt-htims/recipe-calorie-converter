@@ -1,9 +1,9 @@
-import React from 'react';
+import Link from 'next/link';
 
 const Account = () => {
 	return (
 		<div>
-			<h1>account</h1>
+			<h1>accoutn</h1>
 		</div>
 	);
 };

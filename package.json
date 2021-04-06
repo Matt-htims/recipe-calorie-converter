@@ -10,6 +10,8 @@
 	"dependencies": {
 		"@svgr/webpack": "^5.5.0",
 		"axios": "^0.21.1",
+		"firebase": "^8.3.2",
+		"firebase-admin": "^9.6.0",
 		"formik": "^2.2.6",
 		"next": "10.0.8",
 		"react": "17.0.1",

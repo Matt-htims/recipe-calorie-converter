@@ -22,7 +22,7 @@ const ConfirmRecipe = () => {
 	//	State
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
-	//	Handlers
+	//	Handlers for delete conirmation
 	const handleOpenDelete = () => {
 		setDeleteOpen(true);
 	};

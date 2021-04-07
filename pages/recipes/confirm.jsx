@@ -119,24 +119,27 @@ const ConfirmRecipe = () => {
 									Recipe preview
 								</h1>
 								<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">
-									<Sidebar
-										img={recipe.image ? recipe.image : '/missingImage.svg'}
-										ingredients={
-											recipe.extendedIngredients.length
-												? recipe.extendedIngredients.map(
-														ingredient => ingredient.original
-												  )
-												: recipe.ingredients.length
-												? recipe.ingredients.map(ingredient => ingredient)
-												: ''
-										}
-									/>
+									<div className="md:w-1/4">
+										<Sidebar
+											img={recipe.image ? recipe.image : '/missingImage.svg'}
+											ingredients={
+												recipe.extendedIngredients.length
+													? recipe.extendedIngredients.map(
+															ingredient => ingredient.original
+													  )
+													: recipe.ingredients.length
+													? recipe.ingredients.map(ingredient => ingredient)
+													: ''
+											}
+										/>
+									</div>
 
 									<MainSection
 										title={recipe.title}
 										servings={recipe.servings}
 										time={recipe.readyInMinutes}
 										info={recipe.info}
+										saved={false}
 										openDelete={handleOpenDelete}
 										saveRecipe={handleRecipeSave}
 										instructions={

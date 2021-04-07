@@ -46,8 +46,10 @@ const Recipes = () => {
 
 	if (user) {
 		return (
-			<div className="max-w-7xl m-auto">
-				<h1>Recipes</h1>
+			<div className="min-h-screen bg-backgroundWhite max-w-7xl m-auto">
+				<h1 className="text-center text-3xl md:text-5xl text-darkBlue font-accent font-normal pt-10">
+					Recipes
+				</h1>
 				<p onClick={() => console.log(recipes)}>aslkdjfsladkf</p>
 				<div className="flex flex-col space-y-6 items-center">
 					{recipes

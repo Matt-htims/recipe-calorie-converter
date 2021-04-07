@@ -3,12 +3,27 @@ import { useEffect, useState } from 'react';
 import { auth } from '../../../config/firebase';
 import axios from 'axios';
 
+//	Components
+import Sidebar from '../../../components/showRecipe/Sidebar';
+import MainSection from '../../../components/showRecipe/MainSection';
+import DeleteConfirm from '../../../components/DeleteConfirm';
+
 const IndividualRecipe = () => {
 	const router = useRouter();
 
 	const { id } = router.query;
 
 	const [recipe, setRecipe] = useState({});
+	const [deleteOpen, setDeleteOpen] = useState(false);
+
+	//	Handlers for delete confirmation
+	const handleOpenDelete = () => {
+		setDeleteOpen(true);
+	};
+
+	const handleCloseDelete = () => {
+		setDeleteOpen(false);
+	};
 
 	const handleRecipeShow = () => {
 		console.log(recipe);
@@ -28,6 +43,7 @@ const IndividualRecipe = () => {
 							.then(response => {
 								console.log(response);
 								console.log('success');
+								router.push('/recipes');
 							})
 							.catch(err => {
 								if (err.response) {
@@ -84,12 +100,50 @@ const IndividualRecipe = () => {
 			: console.log('Not logged in', auth);
 	}, [auth.currentUser]);
 
-	return (
-		<div>
-			<h1 onClick={handleRecipeShow}>Indiv</h1>
-			<button onClick={handleDelete}>Delete</button>
-		</div>
-	);
+	if (recipe.title) {
+		return (
+			<>
+				{deleteOpen && (
+					<DeleteConfirm
+						action="delete"
+						discardFunc={handleDelete}
+						cancelFunc={handleCloseDelete}
+					/>
+				)}
+				<div className="w-11/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
+					<h1
+						className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold"
+						onClick={handleRecipeShow}
+					>
+						Individual recipe
+					</h1>
+					<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">
+						<div className="md:w-1/4">
+							<Sidebar
+								img={recipe.image}
+								ingredients={recipe.ingredients.map(ingredient => {
+									return ingredient.originalString;
+								})}
+							/>
+						</div>
+
+						<MainSection
+							title={recipe.title}
+							servings={recipe.servings}
+							time={recipe.readyInMinutes}
+							info={recipe.info}
+							openDelete={handleOpenDelete}
+							saved={true}
+							instructions={recipe.instructions.map(instruction => {
+								return instruction.step;
+							})}
+						/>
+					</div>
+				</div>
+			</>
+		);
+	}
+	return <h1>error</h1>;
 };
 
 export default IndividualRecipe;

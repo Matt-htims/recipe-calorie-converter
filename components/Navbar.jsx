@@ -12,7 +12,7 @@ const Navbar = () => {
 		setActive(false);
 	};
 	return (
-		<div className="bg-green flex justify-center z-40 sticky">
+		<div className="bg-green flex justify-center z-40 sticky top-0">
 			<nav className="flex items-center flex-wrap p-3 max-w-7xl w-full">
 				<Link href="/">
 					<a

@@ -9,6 +9,7 @@ const MainSection = ({
 	info,
 	openDelete,
 	saveRecipe,
+	saved,
 }) => {
 	return (
 		<div className="md:w-3/4">
@@ -80,19 +81,36 @@ const MainSection = ({
 						</>
 					)}
 				</div>
-				<div className="buttons flex justify-between md:ml-11 md:mr-11">
-					<div className="discard">
-						<Button onClick={openDelete} basic>
-							DISCARD
-						</Button>
-					</div>
-					<div className="edit-save flex md:block md:space-x-4">
-						<Button secondary>EDIT</Button>
-						<Button onClick={saveRecipe} primary>
-							SAVE
-						</Button>
-					</div>
-				</div>
+				<>
+					{saved ? (
+						<div className="buttons flex justify-end space-x-4 md:mr-2">
+							<div className="edit">
+								<Button secondary basic>
+									EDIT
+								</Button>
+							</div>
+							<div className="delete">
+								<Button onClick={openDelete} color="red" basic>
+									DELETE
+								</Button>
+							</div>
+						</div>
+					) : (
+						<div className="buttons flex justify-between md:ml-11 md:mr-11">
+							<div className="discard">
+								<Button onClick={openDelete} basic>
+									DISCARD
+								</Button>
+							</div>
+							<div className="edit-save flex md:block md:space-x-4">
+								<Button secondary>EDIT</Button>
+								<Button onClick={saveRecipe} primary>
+									SAVE
+								</Button>
+							</div>
+						</div>
+					)}
+				</>
 			</div>
 		</div>
 	);

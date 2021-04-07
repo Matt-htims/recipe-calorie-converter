@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from 'semantic-ui-react';
 
 const MainSection = ({
@@ -10,6 +8,7 @@ const MainSection = ({
 	nutrition,
 	info,
 	openDelete,
+	saveRecipe,
 }) => {
 	return (
 		<div className="md:w-3/4">
@@ -89,7 +88,9 @@ const MainSection = ({
 					</div>
 					<div className="edit-save flex md:block md:space-x-4">
 						<Button secondary>EDIT</Button>
-						<Button primary>SAVE</Button>
+						<Button onClick={saveRecipe} primary>
+							SAVE
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { auth } from '../../config/firebase';
+import uniqid from 'uniqid';
 
 import { useRouter } from 'next/router';
 
@@ -22,7 +25,57 @@ const ConfirmRecipe = () => {
 	//	State
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
-	//	Handlers for delete conirmation
+	//	Recipe save handler
+	const handleRecipeSave = () => {
+		auth.currentUser
+			? auth.currentUser
+					.getIdToken(/* forceRefresh */ true)
+					.then(function (idToken) {
+						axios({
+							method: 'post',
+							url: 'http://localhost:3000/api/recipe',
+							headers: { authorization: idToken },
+							data: {
+								id: uniqid(),
+								title: recipe.title,
+								userId: auth.currentUser.uid,
+								servings: recipe.servings,
+								image: recipe.image,
+								ingredients: recipe.extendedIngredients.length
+									? recipe.extendedIngredients
+									: recipe.ingredients,
+								readyInMinutes: recipe.readyInMinutes,
+								info: recipe.info,
+								instructions: recipe.extendedInstructions.length
+									? recipe.extendedInstructions
+									: recipe.instructions,
+							},
+						})
+							.then(response => {
+								console.log(response);
+								console.log('success');
+								router.push('/recipes');
+							})
+							.catch(err => {
+								if (err.response) {
+									//	Client received an error resonse (5xx, 4xx)
+									console.log(err);
+								} else if (err.request) {
+									//	Client never received a response, or request never left
+									console.log(err);
+								} else {
+									//	Anything else
+									console.log(err);
+								}
+							});
+					})
+					.catch(function (error) {
+						// Handle error
+					})
+			: console.log('Not logged in'); //	Need to add in some logic to say not logged in but likely will just prevent adding alltogether unless logged in
+	};
+
+	//	Handlers for delete confirmation
 	const handleOpenDelete = () => {
 		setDeleteOpen(true);
 	};
@@ -85,6 +138,7 @@ const ConfirmRecipe = () => {
 										time={recipe.readyInMinutes}
 										info={recipe.info}
 										openDelete={handleOpenDelete}
+										saveRecipe={handleRecipeSave}
 										instructions={
 											recipe.extendedInstructions.length
 												? recipe.extendedInstructions.map(

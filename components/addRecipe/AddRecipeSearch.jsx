@@ -6,8 +6,6 @@ import { useRouter } from 'next/router';
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';
 
-const edamamURL = `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${process.env.NEXT_PUBLIC_EDAMAM_KEY}`;
-
 const AddRecipeSearch = () => {
 	const router = useRouter();
 	//  State
@@ -26,6 +24,7 @@ const AddRecipeSearch = () => {
 			)
 				.then(response => {
 					const { data } = response;
+
 					const searchRecipe = {
 						populated: true,
 						instructions: [],
@@ -38,6 +37,7 @@ const AddRecipeSearch = () => {
 						summary: data.summary,
 						preparationMinutes: data.preparationMinutes,
 						readyInMinutes: data.readyInMinutes,
+						originalUrl: data.sourceUrl,
 						info: {
 							vegetarian: data.vegetarian,
 							vegan: data.vegan,
@@ -72,15 +72,6 @@ const AddRecipeSearch = () => {
 		} else {
 			console.log('No URL');
 		}
-	};
-
-	const getCaloriesHandler = async () => {
-		const data = await axios({
-			method: 'post',
-			url: edamamURL,
-			data: formattedData,
-		});
-		setRecipeData(data);
 	};
 
 	return (

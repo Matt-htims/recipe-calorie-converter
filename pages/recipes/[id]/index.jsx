@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { auth } from '../../../config/firebase';
-import axios from 'axios';
 
 //	Components
 import Sidebar from '../../../components/showRecipe/Sidebar';
 import MainSection from '../../../components/showRecipe/MainSection';
 import DeleteConfirm from '../../../components/DeleteConfirm';
+
+// Api requests
+import getOne from '../../../api/getOne';
+import deleteOne from '../../../api/deleteOne';
 
 const IndividualRecipe = () => {
 	const router = useRouter();
@@ -34,29 +37,7 @@ const IndividualRecipe = () => {
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
 					.then(function (idToken) {
-						axios({
-							method: 'DELETE',
-							url: `http://localhost:3000/api/recipe/${id}`,
-							//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
-							headers: { authorization: idToken },
-						})
-							.then(response => {
-								console.log(response);
-								console.log('success');
-								router.push('/recipes');
-							})
-							.catch(err => {
-								if (err.response) {
-									//	Client received an error resonse (5xx, 4xx)
-									console.log(err);
-								} else if (err.request) {
-									//	Client never received a response, or request never left
-									console.log(err);
-								} else {
-									//	Anything else
-									console.log(err);
-								}
-							});
+						deleteOne(idToken, id).then(() => router.push('/recipes'));
 					})
 					.catch(function (error) {
 						// Handle error
@@ -69,30 +50,7 @@ const IndividualRecipe = () => {
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
 					.then(function (idToken) {
-						axios({
-							method: 'GET',
-							url: `http://localhost:3000/api/recipe/${id}`,
-							//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
-							headers: { authorization: idToken },
-						})
-							.then(response => {
-								console.log(response);
-								console.log('success');
-								setRecipe(response.data);
-							})
-							.catch(err => {
-								setRecipe({ error: true });
-								if (err.response) {
-									//	Client received an error resonse (5xx, 4xx)
-									console.log(err);
-								} else if (err.request) {
-									//	Client never received a response, or request never left
-									console.log(err);
-								} else {
-									//	Anything else
-									console.log(err);
-								}
-							});
+						getOne(idToken, id).then(response => setRecipe(response));
 					})
 					.catch(function (error) {
 						// Handle error

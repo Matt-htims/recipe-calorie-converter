@@ -10,6 +10,10 @@ const divByServings = (value, servings) => {
 	return Math.round(value / servings);
 };
 
+// Api requests
+import addOne from '../../api/addOne';
+import nutritionRequest from '../../api/nutritionRequest';
+
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';
 
@@ -32,104 +36,22 @@ const ConfirmRecipe = () => {
 
 	//	Recipe save handler
 	const handleRecipeSave = async () => {
-		const { data } = await axios({
-			method: 'post',
-			url: process.env.NEXT_PUBLIC_EDAMAM_URL,
-			data: {
-				title: recipe.title,
-				ingr: recipe.extendedIngredients.length
-					? recipe.extendedIngredients.map(ingredient => ingredient.original)
-					: recipe.ingredients,
-			},
-		});
-		console.log(data);
-
-		auth.currentUser
-			? auth.currentUser
+		if (auth.currentUser) {
+			nutritionRequest(recipe).then(data => {
+				auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
 					.then(function (idToken) {
-						axios({
-							method: 'post',
-							url: 'http://localhost:3000/api/recipe',
-							headers: { authorization: idToken },
-							data: {
-								id: uniqid(),
-								title: recipe.title,
-								userId: auth.currentUser.uid,
-								servings: recipe.servings,
-								image: recipe.image,
-								ingredients: recipe.extendedIngredients.length
-									? recipe.extendedIngredients.map(
-											ingredient => ingredient.original
-									  )
-									: recipe.ingredients,
-								readyInMinutes: recipe.readyInMinutes,
-								info: recipe.info,
-								instructions: recipe.extendedInstructions.length
-									? recipe.extendedInstructions.map(
-											instruction => instruction.step
-									  )
-									: recipe.instructions,
-								calorieInfo: {
-									calories: divByServings(data.calories, recipe.servings),
-
-									totalNutrientsGrams: {
-										carbs: divByServings(
-											data.totalNutrients.CHOCDF.quantity,
-											recipe.servings
-										),
-										protein: divByServings(
-											data.totalNutrients.PROCNT.quantity,
-											recipe.servings
-										),
-										fat: divByServings(
-											data.totalNutrients.FAT.quantity,
-											recipe.servings
-										),
-									},
-									totalDailyPercent: {
-										carbs: divByServings(
-											data.totalDaily.CHOCDF.quantity,
-											recipe.servings
-										),
-										calories: divByServings(
-											data.totalDaily.ENERC_KCAL.quantity,
-											recipe.servings
-										),
-										protein: divByServings(
-											data.totalDaily.PROCNT.quantity,
-											recipe.servings
-										),
-										fat: divByServings(
-											data.totalDaily.FAT.quantity,
-											recipe.servings
-										),
-									},
-								},
-							},
-						})
-							.then(response => {
-								console.log(response);
-								console.log('success');
-								router.push('/recipes');
-							})
-							.catch(err => {
-								if (err.response) {
-									//	Client received an error resonse (5xx, 4xx)
-									console.log(err);
-								} else if (err.request) {
-									//	Client never received a response, or request never left
-									console.log(err);
-								} else {
-									//	Anything else
-									console.log(err);
-								}
-							});
+						addOne(idToken, recipe, data, uniqid())
+							.then(() => router.push('/recipes'))
+							.catch(err => console.error(err));
 					})
-					.catch(function (error) {
-						// Handle error
-					})
-			: console.log('Not logged in'); //	Need to add in some logic to say not logged in but likely will just prevent adding alltogether unless logged in
+					.catch(function (err) {
+						console.error(err);
+					});
+			});
+		} else {
+			console.log('Not logged in');
+		}
 	};
 
 	//	Handlers for delete confirmation
@@ -172,7 +94,10 @@ const ConfirmRecipe = () => {
 								/>
 							)}
 							<div className="w-11/12 md:w-11/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
-								<h1 className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold">
+								<h1
+									onClick={() => console.log(recipe)}
+									className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold"
+								>
 									Recipe preview
 								</h1>
 								<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">

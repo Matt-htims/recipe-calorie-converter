@@ -7,6 +7,9 @@ import { auth } from '../../../config/firebase';
 //  Components
 import EditRecipe from '../../../components/EditRecipe';
 
+//	Api requests
+import getOne from '../../../api/getOne';
+
 const Edit = () => {
 	const router = useRouter();
 	const { id } = router.query;
@@ -17,30 +20,7 @@ const Edit = () => {
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
 					.then(function (idToken) {
-						axios({
-							method: 'GET',
-							url: `http://localhost:3000/api/recipe/${id}`,
-							//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
-							headers: { authorization: idToken },
-						})
-							.then(response => {
-								console.log(response);
-								console.log('success');
-								setRecipe(response.data);
-							})
-							.catch(err => {
-								setRecipe({ error: true });
-								if (err.response) {
-									//	Client received an error resonse (5xx, 4xx)
-									console.log(err);
-								} else if (err.request) {
-									//	Client never received a response, or request never left
-									console.log(err);
-								} else {
-									//	Anything else
-									console.log(err);
-								}
-							});
+						getOne(idToken, id).then(response => setRecipe(response));
 					})
 					.catch(function (error) {
 						// Handle error

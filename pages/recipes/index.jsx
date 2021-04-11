@@ -1,10 +1,12 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { auth } from '../../config/firebase.js';
 import { useAuth } from '../../hooks/useAuth';
 
 //	Components
 import IndivRecipe from '../../components/showRecipe/IndivRecipe';
+
+// Api requests
+import getAll from '../../api/getAll';
 
 const Recipes = () => {
 	const { user } = useAuth();
@@ -15,28 +17,7 @@ const Recipes = () => {
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
 					.then(function (idToken) {
-						axios({
-							method: 'get',
-							url: 'http://localhost:3000/api/recipes',
-							headers: { authorization: idToken },
-						})
-							.then(response => {
-								console.log(response);
-								console.log('success');
-								setRecipes(response.data);
-							})
-							.catch(err => {
-								if (err.response) {
-									//	Client received an error resonse (5xx, 4xx)
-									console.log(err);
-								} else if (err.request) {
-									//	Client never received a response, or request never left
-									console.log(err);
-								} else {
-									//	Anything else
-									console.log(err);
-								}
-							});
+						getAll(idToken).then(response => setRecipes(response));
 					})
 					.catch(function (error) {
 						// Handle error

@@ -7,6 +7,10 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { auth } from '../config/firebase';
 
+// Api requests
+import updateOne from '../api/updateOne';
+import nutritionRequest from '../api/nutritionRequest';
+
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),
 	ingredients: yup.string().required('This field is required'),
@@ -20,9 +24,11 @@ const EditRecipe = ({ recipe }) => {
 	const router = useRouter();
 	const { id } = router.query;
 
+	const formattedIngredients = recipe.ingredients.join('\n');
+
 	const initialFormState = {
 		recipeName: recipe.title,
-		ingredients: recipe.ingredients.join('\n'),
+		ingredients: formattedIngredients,
 		servings: recipe.servings,
 		readyInMinutes: recipe.readyInMinutes,
 		instructions: recipe.instructions.join('\n'),
@@ -38,48 +44,28 @@ const EditRecipe = ({ recipe }) => {
 			<Formik
 				initialValues={initialFormState}
 				onSubmit={(values, { resetForm }) => {
+					const nutritionRecipe = {
+						title: values.recipeName,
+						ingredients: values.ingredients.split('\n'),
+						extendedIngredients: {},
+					};
 					auth.currentUser
 						? auth.currentUser
 								.getIdToken(/* forceRefresh */ true)
 								.then(function (idToken) {
-									axios({
-										method: 'PUT',
-										url: `http://localhost:3000/api/recipe/${id}`,
-										//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
-										headers: { authorization: idToken },
-										data: {
-											title: values.title,
-											image: values.image,
-											info: {
-												dairyFree: values.dairyFree,
-												glutenFree: values.glutenFree,
-												vegetarian: values.vegetarian,
-												vegan: values.vegan,
-											},
-											readyInMinutes: values.readyInMinutes,
-											title: values.recipeName,
-											ingredients: values.ingredients.split('\n'),
-											instructions: values.instructions.split('\n'),
-										},
-									})
-										.then(response => {
-											console.log(response);
-											console.log('success');
-											router.push(`/recipes/${id}`);
-										})
-										.catch(err => {
-											setRecipe({ error: true });
-											if (err.response) {
-												//	Client received an error resonse (5xx, 4xx)
-												console.log(err);
-											} else if (err.request) {
-												//	Client never received a response, or request never left
-												console.log(err);
-											} else {
-												//	Anything else
-												console.log(err);
-											}
-										});
+									if (values.ingredients !== formattedIngredients) {
+										nutritionRequest(nutritionRecipe)
+											.then(data => {
+												updateOne(idToken, id, values, true, data)
+													.then(() => router.push(`/recipes/${id}`))
+													.catch(err => console.log(err));
+											})
+											.catch(err => console.error(err, 'error'));
+									} else {
+										updateOne(idToken, id, values, false)
+											.then(() => router.push(`/recipes/${id}`))
+											.catch(err => console.log(err));
+									}
 								})
 								.catch(function (error) {
 									// Handle error

@@ -5,6 +5,11 @@ import uniqid from 'uniqid';
 
 import { useRouter } from 'next/router';
 
+//	Divide by servings function
+const divByServings = (value, servings) => {
+	return Math.round(value / servings);
+};
+
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';
 
@@ -26,7 +31,19 @@ const ConfirmRecipe = () => {
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
 	//	Recipe save handler
-	const handleRecipeSave = () => {
+	const handleRecipeSave = async () => {
+		const { data } = await axios({
+			method: 'post',
+			url: process.env.NEXT_PUBLIC_EDAMAM_URL,
+			data: {
+				title: recipe.title,
+				ingr: recipe.extendedIngredients.length
+					? recipe.extendedIngredients.map(ingredient => ingredient.original)
+					: recipe.ingredients,
+			},
+		});
+		console.log(data);
+
 		auth.currentUser
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
@@ -42,13 +59,53 @@ const ConfirmRecipe = () => {
 								servings: recipe.servings,
 								image: recipe.image,
 								ingredients: recipe.extendedIngredients.length
-									? recipe.extendedIngredients
+									? recipe.extendedIngredients.map(
+											ingredient => ingredient.original
+									  )
 									: recipe.ingredients,
 								readyInMinutes: recipe.readyInMinutes,
 								info: recipe.info,
 								instructions: recipe.extendedInstructions.length
-									? recipe.extendedInstructions
+									? recipe.extendedInstructions.map(
+											instruction => instruction.step
+									  )
 									: recipe.instructions,
+								calorieInfo: {
+									calories: divByServings(data.calories, recipe.servings),
+
+									totalNutrientsGrams: {
+										carbs: divByServings(
+											data.totalNutrients.CHOCDF.quantity,
+											recipe.servings
+										),
+										protein: divByServings(
+											data.totalNutrients.PROCNT.quantity,
+											recipe.servings
+										),
+										fat: divByServings(
+											data.totalNutrients.FAT.quantity,
+											recipe.servings
+										),
+									},
+									totalDailyPercent: {
+										carbs: divByServings(
+											data.totalDaily.CHOCDF.quantity,
+											recipe.servings
+										),
+										calories: divByServings(
+											data.totalDaily.ENERC_KCAL.quantity,
+											recipe.servings
+										),
+										protein: divByServings(
+											data.totalDaily.PROCNT.quantity,
+											recipe.servings
+										),
+										fat: divByServings(
+											data.totalDaily.FAT.quantity,
+											recipe.servings
+										),
+									},
+								},
 							},
 						})
 							.then(response => {

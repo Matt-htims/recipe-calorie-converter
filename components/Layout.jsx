@@ -4,7 +4,7 @@ const Layout = ({ children }) => {
 	return (
 		<div className="font-sans bg-backgroundWhite h-screen">
 			<Navbar />
-			<main className="">{children}</main>
+			<main className="relative">{children}</main>
 		</div>
 	);
 };

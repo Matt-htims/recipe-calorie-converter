@@ -4,74 +4,87 @@ import * as yup from 'yup';
 import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
-//	Zustand state
-import { enteredRecipeStore } from '../../zustand';
-
-const initialFormState = {
-	recipeName: '',
-	ingredients: '',
-	servings: '',
-	totalTime: '',
-	instructions: '',
-	imageLink: '',
-	dairyFree: false,
-	glutenFree: false,
-	vegetarian: false,
-	vegan: false,
-};
+import axios from 'axios';
+import { auth } from '../config/firebase';
 
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),
 	ingredients: yup.string().required('This field is required'),
 	servings: yup.number().typeError('Must be a number'),
-	totalTime: yup.number().typeError('Must be a number'),
+	readyInMinutes: yup.number().typeError('Must be a number'),
 	instructions: yup.string(),
 	imageLink: yup.string(),
 });
 
-const AddRecipeManual = () => {
+const EditRecipe = ({ recipe }) => {
 	const router = useRouter();
+	const { id } = router.query;
 
-	//	New Recipe state
-	const actions = enteredRecipeStore(s => s.actions);
+	const initialFormState = {
+		recipeName: recipe.title,
+		ingredients: recipe.ingredients.join('\n'),
+		servings: recipe.servings,
+		readyInMinutes: recipe.readyInMinutes,
+		instructions: recipe.instructions.join('\n'),
+		image: recipe.image,
+		dairyFree: recipe.info.dairyFree,
+		glutenFree: recipe.info.glutenFree,
+		vegetarian: recipe.info.vegetarian,
+		vegan: recipe.info.vegan,
+	};
 
 	return (
 		<>
 			<Formik
 				initialValues={initialFormState}
 				onSubmit={(values, { resetForm }) => {
-					console.log(values);
-					actions.searchDataRequest();
-					const instructions = values.instructions.length
-						? values.instructions.split('\n')
-						: [];
-					const ingredients = values.ingredients.split('\n');
-					const manuallyAddedRecipe = {
-						populated: true,
-						instructions: instructions,
-						extendedInstructions: [],
-						cookingMinutes: '',
-						extendedIngredients: [],
-						ingredients,
-						image: values.imageLink,
-						servings: values.servings,
-						title: values.recipeName,
-						summary: '',
-						preparationMinutes: '',
-						readyInMinutes: values.totalTime,
-						info: {
-							vegetarian: values.vegetarian ? true : false,
-							vegan: values.vegan ? true : false,
-							sustainable: '',
-							veryHealthy: '',
-							pricePerServing: '',
-							glutenFree: values.glutenFree ? true : false,
-							dairyFree: values.dairyFree ? true : false,
-						},
-					};
-					actions.searchDataSuccess(manuallyAddedRecipe);
-					router.push('/recipes/confirm');
-					resetForm();
+					auth.currentUser
+						? auth.currentUser
+								.getIdToken(/* forceRefresh */ true)
+								.then(function (idToken) {
+									axios({
+										method: 'PUT',
+										url: `http://localhost:3000/api/recipe/${id}`,
+										//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
+										headers: { authorization: idToken },
+										data: {
+											title: values.title,
+											image: values.image,
+											info: {
+												dairyFree: values.dairyFree,
+												glutenFree: values.glutenFree,
+												vegetarian: values.vegetarian,
+												vegan: values.vegan,
+											},
+											readyInMinutes: values.readyInMinutes,
+											title: values.recipeName,
+											ingredients: values.ingredients.split('\n'),
+											instructions: values.instructions.split('\n'),
+										},
+									})
+										.then(response => {
+											console.log(response);
+											console.log('success');
+											router.push(`/recipes/${id}`);
+										})
+										.catch(err => {
+											setRecipe({ error: true });
+											if (err.response) {
+												//	Client received an error resonse (5xx, 4xx)
+												console.log(err);
+											} else if (err.request) {
+												//	Client never received a response, or request never left
+												console.log(err);
+											} else {
+												//	Anything else
+												console.log(err);
+											}
+										});
+								})
+								.catch(function (error) {
+									// Handle error
+								})
+						: console.log('Not logged in', auth);
 				}}
 				validationSchema={yupValidation}
 			>
@@ -140,16 +153,16 @@ const AddRecipeManual = () => {
 
 								<Form.Input
 									fluid
-									value={values.totalTime}
+									value={values.readyInMinutes}
 									onChange={handleChange}
 									onBlur={handleBlur}
-									name="totalTime"
+									name="readyInMinutes"
 									label="Total time (mins)"
 									placeholder="25"
 									error={
-										touched.totalTime &&
-										errors.totalTime && {
-											content: errors.totalTime,
+										touched.readyInMinutes &&
+										errors.readyInMinutes && {
+											content: errors.readyInMinutes,
 											pointing: 'above',
 										}
 									}
@@ -174,16 +187,16 @@ Skin the carrots"
 							/>
 
 							<Form.Input
-								value={values.imageLink}
+								value={values.image}
 								onChange={handleChange}
 								onBlur={handleBlur}
-								name="imageLink"
+								name="image"
 								label="Image link"
 								placeholder="https://thatlovelyimagewebsite.com/image-2"
 								error={
-									touched.imageLink &&
-									errors.imageLink && {
-										content: errors.imageLink,
+									touched.image &&
+									errors.image && {
+										content: errors.image,
 										pointing: 'above',
 									}
 								}
@@ -249,4 +262,4 @@ Skin the carrots"
 	);
 };
 
-export default AddRecipeManual;
+export default EditRecipe;

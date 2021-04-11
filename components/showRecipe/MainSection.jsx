@@ -1,4 +1,9 @@
 import { Button } from 'semantic-ui-react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+//	Components
+import NutritionBox from './NutritionBox';
 
 const MainSection = ({
 	title,
@@ -11,13 +16,47 @@ const MainSection = ({
 	saveRecipe,
 	saved,
 }) => {
+	const router = useRouter();
+	const { id } = router.query;
+
+	const handleEdit = () => {
+		router.push(`/recipes/${id}/edit`);
+	};
 	return (
 		<div className="md:w-3/4">
-			<div className="bg-white shadow-xl px-5 py-10 md:p-7 rounded-2xl  space-y-10">
+			<div className="bg-white shadow-xl px-5 py-10 md:p-7 rounded-2xl  space-y-8">
 				<h2 className="text-center font-sans font-medium text-3xl">{title}</h2>
 				{nutrition && (
-					<div className="nutrition">
-						<h2>nut</h2>
+					<div>
+						<div className="nutrition flex justify-between max-w-lg m-auto">
+							<NutritionBox
+								name="Calories"
+								amount={nutrition.calories}
+								percent={nutrition.totalDailyPercent.calories}
+								unit="kcal"
+							/>
+							<NutritionBox
+								name="Carbs"
+								amount={nutrition.totalNutrientsGrams.carbs}
+								percent={nutrition.totalDailyPercent.carbs}
+								unit="g"
+							/>
+							<NutritionBox
+								name="Protein"
+								amount={nutrition.totalNutrientsGrams.protein}
+								percent={nutrition.totalDailyPercent.protein}
+								unit="g"
+							/>
+							<NutritionBox
+								name="Fat"
+								amount={nutrition.totalNutrientsGrams.fat}
+								percent={nutrition.totalDailyPercent.fat}
+								unit="g"
+							/>
+						</div>
+						<p className="text-sm text-gray-500 pt-3 text-center">
+							Nutrition per serving
+						</p>
 					</div>
 				)}
 				<div className="md:ml-11 md:mr-11">
@@ -84,14 +123,14 @@ const MainSection = ({
 				<>
 					{saved ? (
 						<div className="buttons flex justify-end space-x-4 md:mr-2">
-							<div className="edit">
-								<Button secondary basic>
-									EDIT
+							<div className="delete">
+								<Button onClick={openDelete} basic>
+									DELETE
 								</Button>
 							</div>
-							<div className="delete">
-								<Button onClick={openDelete} color="red" basic>
-									DELETE
+							<div className="edit">
+								<Button onClick={handleEdit} primary>
+									EDIT
 								</Button>
 							</div>
 						</div>

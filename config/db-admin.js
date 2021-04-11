@@ -1,25 +1,4 @@
 import { firestore } from './firebase-admin';
-import firebase from 'firebase/app';
-import { db } from './firebase';
-
-export async function getUserSites(uid) {
-	const snapshot = await firestore
-		.collection('ghost_sites')
-		.where('authorId', '==', uid)
-		.get();
-
-	const sites = [];
-
-	snapshot.forEach(doc => {
-		sites.push({ id: doc.id, ...doc.data() });
-	});
-
-	sites.sort((a, b) =>
-		compareDesc(parseISO(a.createdAt), parseISO(b.createdAt))
-	);
-
-	return { sites };
-}
 
 export async function showRecipes(uid) {
 	const data = await firestore
@@ -99,6 +78,22 @@ export async function editRecipe(id, body) {
 		})
 		.catch(error => {
 			console.error('Error updating document: ', error);
+		});
+
+	return { data };
+}
+
+// Not in use yet but should work for deleting all recipes to do with a user account
+export async function deleteAllUserRecipes(uid) {
+	const data = await firestore
+		.collection('recipes')
+		.where('userId', '==', uid)
+		.delete()
+		.then(() => {
+			console.log('All recipes for this user successfully deleted');
+		})
+		.catch(error => {
+			console.error('Error deleting user recipes: ', error);
 		});
 
 	return { data };

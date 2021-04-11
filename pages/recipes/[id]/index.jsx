@@ -102,7 +102,7 @@ const IndividualRecipe = () => {
 
 	if (recipe.title) {
 		return (
-			<>
+			<div className="min-h-screen pt-12">
 				{deleteOpen && (
 					<DeleteConfirm
 						action="delete"
@@ -110,7 +110,8 @@ const IndividualRecipe = () => {
 						cancelFunc={handleCloseDelete}
 					/>
 				)}
-				<div className="w-11/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
+
+				<div className="w-11/12 m-auto space-y-0 md:space-y-12 max-w-7xl">
 					<h1
 						className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold"
 						onClick={handleRecipeShow}
@@ -119,12 +120,7 @@ const IndividualRecipe = () => {
 					</h1>
 					<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">
 						<div className="md:w-1/4">
-							<Sidebar
-								img={recipe.image}
-								ingredients={recipe.ingredients.map(ingredient => {
-									return ingredient.originalString;
-								})}
-							/>
+							<Sidebar img={recipe.image} ingredients={recipe.ingredients} />
 						</div>
 
 						<MainSection
@@ -134,13 +130,12 @@ const IndividualRecipe = () => {
 							info={recipe.info}
 							openDelete={handleOpenDelete}
 							saved={true}
-							instructions={recipe.instructions.map(instruction => {
-								return instruction.step;
-							})}
+							instructions={recipe.instructions}
+							nutrition={recipe.calorieInfo}
 						/>
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	}
 	return <h1>error</h1>;

@@ -58,7 +58,9 @@ const Recipes = () => {
 									<IndivRecipe
 										key={recipe.id}
 										title={recipe.title}
-										calories="389"
+										calories={
+											recipe.calorieInfo ? recipe.calorieInfo.calories : 'none'
+										}
 										id={recipe.id}
 										image={recipe.image}
 									/>

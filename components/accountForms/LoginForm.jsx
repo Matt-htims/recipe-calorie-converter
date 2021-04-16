@@ -37,9 +37,7 @@ const LoginForm = () => {
 					setError(null);
 					return auth.signIn(values).then(response => {
 						setIsLoading(false);
-						response.error
-							? setError(response.error)
-							: router.push('/dashboard');
+						response.error ? setError(response.error) : router.push('/account');
 					});
 				}}
 				validationSchema={yupValidation}
@@ -104,7 +102,7 @@ const LoginForm = () => {
 							</div>
 
 							<div className="flex justify-center mt-5">
-								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+								<Form.Button onClick={handleSubmit} type="submit" primary>
 									Login
 								</Form.Button>
 							</div>

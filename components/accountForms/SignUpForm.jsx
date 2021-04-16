@@ -37,9 +37,7 @@ const SignUpForm = () => {
 					setError(null);
 					return auth.signUp(values).then(response => {
 						setIsLoading(false);
-						response.error
-							? setError(response.error)
-							: router.push('/dashboard');
+						response.error ? setError(response.error) : router.push('/account');
 					});
 				}}
 				validationSchema={yupValidation}
@@ -107,7 +105,7 @@ const SignUpForm = () => {
 							/>
 
 							<div className="flex justify-center mt-14">
-								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+								<Form.Button onClick={handleSubmit} type="submit" primary>
 									Sign up
 								</Form.Button>
 							</div>

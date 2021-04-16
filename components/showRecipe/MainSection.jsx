@@ -1,9 +1,9 @@
 import { Button } from 'semantic-ui-react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 //	Components
 import NutritionBox from './NutritionBox';
+import RecipeIcons from './RecipeIcons';
 
 const MainSection = ({
 	title,
@@ -65,40 +65,7 @@ const MainSection = ({
 							<p>{`${servings} servings`}</p>
 							<p>{`${time} mins total time`}</p>
 						</div>
-						<div className="icons grid grid-cols-2 gap-4">
-							{info.vegetarian && (
-								<img
-									className="w-8 h-8"
-									title="Vegetarian"
-									src="/vegetarian.svg"
-									alt="vegetarian"
-								/>
-							)}
-							{info.vegan && (
-								<img
-									className="w-8 h-8"
-									title="Vegan"
-									src="/vegan.svg"
-									alt="vegan"
-								/>
-							)}
-							{info.glutenFree && (
-								<img
-									className="w-8 h-8"
-									title="Gluten free"
-									src="/glutenFree.svg"
-									alt="Gluten free"
-								/>
-							)}
-							{info.dairyFree && (
-								<img
-									className="w-8 h-8"
-									title="Dairy free"
-									src="/dairyFree.svg"
-									alt="Dairy free"
-								/>
-							)}
-						</div>
+						<RecipeIcons info={info} />
 					</div>
 				</div>
 				<div className="instructions space-y-8">

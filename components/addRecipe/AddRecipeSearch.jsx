@@ -86,7 +86,7 @@ const AddRecipeSearch = () => {
 					value={recipeURL}
 					placeholder="Recipe url..."
 					action={{
-						color: 'vk',
+						color: 'primary',
 						content: 'Add',
 					}}
 					error={error && { content: error, pointing: 'above' }}

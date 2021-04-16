@@ -53,7 +53,7 @@ const ResetPasswordForm = () => {
 							/>
 
 							<div className="flex justify-center mt-14">
-								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+								<Form.Button onClick={handleSubmit} type="submit" primary>
 									Send reset link
 								</Form.Button>
 							</div>

@@ -13,7 +13,7 @@ const updateOneRecipe = (authorizationId, recipeId, values, update, data) => {
 			//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
 			headers: { authorization: authorizationId },
 			data: {
-				title: values.title,
+				title: values.recipeName,
 				image: values.image,
 				info: {
 					dairyFree: values.dairyFree,
@@ -25,6 +25,8 @@ const updateOneRecipe = (authorizationId, recipeId, values, update, data) => {
 				title: values.recipeName,
 				ingredients: values.ingredients.split('\n'),
 				instructions: values.instructions.split('\n'),
+				servings: values.servings,
+				calorieInfo: values.calorieInfo,
 			},
 		})
 			.then(response => {

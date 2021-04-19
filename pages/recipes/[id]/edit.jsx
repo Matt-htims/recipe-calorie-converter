@@ -24,6 +24,8 @@ const Edit = () => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
+		let mounted = true;
+
 		setLoading(true);
 		auth.currentUser
 			? auth.currentUser
@@ -32,19 +34,22 @@ const Edit = () => {
 						getOne(idToken, id)
 							.then(response => {
 								setRecipe(response);
-								setLoading(false);
+								mounted ? setLoading(false) : '';
 							})
 							.catch(err => {
-								setLoading(false);
+								mounted ? setLoading(false) : '';
 							});
 					})
 					.catch(function (error) {
-						setLoading(false);
+						mounted ? setLoading(false) : '';
 					})
 			: console.log('Not logged in');
 		setTimeout(() => {
-			setLoading(false);
-		}, 5000);
+			mounted ? setLoading(false) : '';
+		}, 3000);
+		return function cleanup() {
+			mounted = false;
+		};
 	}, [auth.currentUser, user]);
 
 	if (loading) return <Loader />;

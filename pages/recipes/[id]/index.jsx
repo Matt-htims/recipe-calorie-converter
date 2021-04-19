@@ -53,8 +53,9 @@ const IndividualRecipe = () => {
 	};
 
 	useEffect(() => {
+		let mounted = true;
 		setLoading(true);
-		console.log(user);
+
 		auth.currentUser
 			? auth.currentUser
 					.getIdToken(/* forceRefresh */ true)
@@ -62,20 +63,23 @@ const IndividualRecipe = () => {
 						getOne(idToken, id)
 							.then(response => {
 								setRecipe(response);
-								setLoading(false);
+								mounted ? setLoading(false) : '';
 							})
 							.catch(err => {
 								console.error(err);
-								setLoading(false);
+								mounted ? setLoading(false) : '';
 							});
 					})
 					.catch(function (error) {
-						setLoading(false);
+						mounted ? setLoading(false) : '';
 					})
 			: console.log('Not logged in');
 		setTimeout(() => {
-			setLoading(false);
-		}, 5000);
+			mounted ? setLoading(false) : '';
+		}, 3000);
+		return function cleanup() {
+			mounted = false;
+		};
 	}, [auth.currentUser, user]);
 	if (loading) return <Loader />;
 	if (!recipe.title) return <NoRecipe />;

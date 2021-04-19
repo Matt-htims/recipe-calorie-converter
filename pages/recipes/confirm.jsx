@@ -93,7 +93,7 @@ const ConfirmRecipe = () => {
 									cancelFunc={handleCloseDelete}
 								/>
 							)}
-							<div className="w-11/12 md:w-11/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
+							<div className="w-11/12 md:w-11/12 min-h-screen m-auto pt-12 space-y-0 md:space-y-12 max-w-7xl">
 								<h1
 									onClick={() => console.log(recipe)}
 									className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold"

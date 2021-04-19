@@ -42,7 +42,9 @@ const Edit = () => {
 						setLoading(false);
 					})
 			: console.log('Not logged in');
-		setLoading(false);
+		setTimeout(() => {
+			setLoading(false);
+		}, 5000);
 	}, [auth.currentUser, user]);
 
 	if (loading) return <Loader />;

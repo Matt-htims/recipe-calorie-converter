@@ -64,6 +64,7 @@ const updateOneRecipe = (authorizationId, recipeId, values, update, data) => {
 				title: values.recipeName,
 				ingredients: values.ingredients.split('\n'),
 				instructions: values.instructions.split('\n'),
+				servings: values.servings,
 				calorieInfo: {
 					calories: divByServings(data.calories, values.servings),
 

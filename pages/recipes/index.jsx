@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { auth } from '../../config/firebase.js';
 import { useAuth } from '../../hooks/useAuth';
+import Link from 'next/link';
 
 //	Components
 import IndivRecipe from '../../components/showRecipe/IndivRecipe';
@@ -49,9 +50,18 @@ const Recipes = () => {
 	if (!user) return <NotLogged />;
 	return (
 		<div className="min-h-screen bg-backgroundWhite max-w-7xl m-auto">
-			<h1 className="text-center text-3xl md:text-5xl text-darkBlue font-accent font-normal pt-20 pb-14">
-				Recipes
-			</h1>
+			<div className="flex items-center w-11/12 mx-auto justify-between">
+				<h1 className="text-center text-3xl md:text-5xl text-darkBlue font-accent font-normal md:py-16 py-8 m-0">
+					My recipes
+				</h1>
+				<Link href="/recipes/new">
+					<a>
+						<p className="cursor-pointer md:p-3 p-2 border font-sans font-medium text-darkBlue md:text-base text-sm rounded-md border-darkBlue hover:text-white hover:bg-darkBlue">
+							Add recipes
+						</p>
+					</a>
+				</Link>
+			</div>
 			<div className="flex flex-col space-y-6 items-center">
 				{recipes
 					? recipes.map(recipe => {

@@ -2,7 +2,7 @@ import DashboardSection from './DashboardSection';
 
 const Dashboard = () => {
 	return (
-		<div className="grid md:grid-cols-3 grid-cols-1 gap-4 my-20">
+		<div className="grid md:grid-cols-3 grid-cols-1 gap-4 md:my-20 my-10 md:w-full w-10/12 mx-auto">
 			<DashboardSection
 				title="Add a recipe"
 				image="/addRecipe.svg"

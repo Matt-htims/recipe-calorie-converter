@@ -10,7 +10,9 @@ const DashboardSection = ({ title, image, pageLink }) => {
 						<div className="h-3/5  flex justify-center items-center p-10 mt-8">
 							<img className="h-full" src={image} alt="" />
 						</div>
-						<h3>{title}</h3>
+						<h3 className="font-sans font-medium text-2xl text-darkBlue">
+							{title}
+						</h3>
 					</div>
 				</a>
 			</Link>

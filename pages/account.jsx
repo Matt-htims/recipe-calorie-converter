@@ -12,7 +12,7 @@ const Account = () => {
 	return (
 		<div className="min-h-screen flex bg-backgroundWhite">
 			<div className="mt-8 mx-auto w-full max-w-7xl px-4">
-				<div className="text-center mt-24">
+				<div className="text-center md:mt-24">
 					<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
 						{`Welcome ${auth.user.name ? auth.user.name : ''}!`}
 					</h2>

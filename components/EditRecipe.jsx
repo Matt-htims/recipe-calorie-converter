@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
-import axios from 'axios';
 import { auth } from '../config/firebase';
 
 //	Funcs

@@ -25,7 +25,7 @@ const Navbar = () => {
 					</a>
 				</Link>
 				<button
-					className="inline-flex p-3 rounded lg:hidden text-darkBlue ml-auto hover:text-darkBlue focus:outline-none"
+					className="inline-flex pr-5 rounded lg:hidden text-darkBlue ml-auto hover:text-darkBlue focus:outline-none"
 					onClick={handleClick}
 				>
 					<img src={active ? '/menuOpen.svg' : '/menuClosed.svg'} alt="" />
@@ -55,7 +55,7 @@ const Navbar = () => {
 						<Link href="/account">
 							<a
 								onClick={closeDropDownHandler}
-								className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-darkBlue font-bold text-center hover:bg-green-light hover:text-darkBlue"
+								className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-darkBlue font-bold text-center hover:bg-green-light hover:text-darkBlue mr-5"
 							>
 								My Account
 							</a>

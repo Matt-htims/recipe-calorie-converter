@@ -4,42 +4,55 @@ import * as yup from 'yup';
 import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
-//	Zustand state
-import { enteredRecipeStore } from '../../zustand';
-
-const initialFormState = {
-	recipeName: '',
-	ingredients: '',
-	servings: '',
-	totalTime: '',
-	instructions: '',
-	imageLink: '',
-	dairyFree: false,
-	glutenFree: false,
-	vegetarian: false,
-	vegan: false,
-};
+import { enteredRecipeStore } from '../zustand';
 
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),
 	ingredients: yup.string().required('This field is required'),
 	servings: yup.number().typeError('Must be a number'),
-	totalTime: yup.number().typeError('Must be a number'),
+	readyInMinutes: yup.number().typeError('Must be a number'),
 	instructions: yup.string(),
 	imageLink: yup.string(),
 });
 
-const AddRecipeManual = () => {
+const EditUnsavedRecipe = () => {
 	const router = useRouter();
+
+	//	Entered Recipe State
+	const recipe = enteredRecipeStore(state => state.recipe);
 
 	//	New Recipe state
 	const actions = enteredRecipeStore(s => s.actions);
 
+	const formattedIngredients = recipe.extendedIngredients.length
+		? recipe.extendedIngredients
+				.map(ingredient => ingredient.original)
+				.join('\n')
+				.replace(',', '')
+		: recipe.ingredients.join('\n');
+	const formattedInstructions = recipe.extendedInstructions.length
+		? recipe.extendedInstructions
+				.map(instruction => instruction.step)
+				.join('\n')
+				.replace(',', '')
+		: recipe.instructions.join('\n');
+
+	const initialFormState = {
+		recipeName: recipe.title,
+		ingredients: formattedIngredients,
+		servings: recipe.servings,
+		readyInMinutes: recipe.readyInMinutes,
+		instructions: formattedInstructions,
+		image: recipe.image,
+		dairyFree: recipe.info.dairyFree,
+		glutenFree: recipe.info.glutenFree,
+		vegetarian: recipe.info.vegetarian,
+		vegan: recipe.info.vegan,
+	};
+
 	return (
-		<div>
-			<h2 className="font-sans font-medium text-xl md:text-3xl pb-3">
-				Add your recipe manually
-			</h2>
+		<>
+			<h1 onClick={() => console.log(recipe)}>recipe</h1>
 			<Formik
 				initialValues={initialFormState}
 				onSubmit={(values, { resetForm }) => {
@@ -56,12 +69,12 @@ const AddRecipeManual = () => {
 						cookingMinutes: '',
 						extendedIngredients: [],
 						ingredients,
-						image: values.imageLink,
+						image: values.image,
 						servings: values.servings,
 						title: values.recipeName,
 						summary: '',
 						preparationMinutes: '',
-						readyInMinutes: values.totalTime,
+						readyInMinutes: values.readyInMinutes,
 						info: {
 							vegetarian: values.vegetarian ? true : false,
 							vegan: values.vegan ? true : false,
@@ -143,16 +156,16 @@ const AddRecipeManual = () => {
 
 								<Form.Input
 									fluid
-									value={values.totalTime}
+									value={values.readyInMinutes}
 									onChange={handleChange}
 									onBlur={handleBlur}
-									name="totalTime"
+									name="readyInMinutes"
 									label="Total time (mins)"
 									placeholder="25"
 									error={
-										touched.totalTime &&
-										errors.totalTime && {
-											content: errors.totalTime,
+										touched.readyInMinutes &&
+										errors.readyInMinutes && {
+											content: errors.readyInMinutes,
 											pointing: 'above',
 										}
 									}
@@ -177,16 +190,16 @@ Skin the carrots"
 							/>
 
 							<Form.Input
-								value={values.imageLink}
+								value={values.image}
 								onChange={handleChange}
 								onBlur={handleBlur}
-								name="imageLink"
+								name="image"
 								label="Image link"
 								placeholder="https://thatlovelyimagewebsite.com/image-2"
 								error={
-									touched.imageLink &&
-									errors.imageLink && {
-										content: errors.imageLink,
+									touched.image &&
+									errors.image && {
+										content: errors.image,
 										pointing: 'above',
 									}
 								}
@@ -240,16 +253,16 @@ Skin the carrots"
 							</div>
 
 							<div className="flex justify-center mt-14">
-								<Form.Button onClick={handleSubmit} type="submit" primary>
-									Add
+								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+									Update
 								</Form.Button>
 							</div>
 						</Form>
 					);
 				}}
 			</Formik>
-		</div>
+		</>
 	);
 };
 
-export default AddRecipeManual;
+export default EditUnsavedRecipe;

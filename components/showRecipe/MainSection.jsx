@@ -22,6 +22,10 @@ const MainSection = ({
 	const handleEdit = () => {
 		router.push(`/recipes/${id}/edit`);
 	};
+
+	const handleUnsavedEdit = () => {
+		router.push('/recipes/edit');
+	};
 	return (
 		<div className="md:w-3/4">
 			<div className="bg-white shadow-xl px-5 py-10 md:p-7 rounded-2xl  space-y-8">
@@ -109,7 +113,9 @@ const MainSection = ({
 								</Button>
 							</div>
 							<div className="edit-save flex md:block md:space-x-4">
-								<Button secondary>EDIT</Button>
+								<Button onClick={handleUnsavedEdit} secondary>
+									EDIT
+								</Button>
 								<Button onClick={saveRecipe} primary>
 									SAVE
 								</Button>

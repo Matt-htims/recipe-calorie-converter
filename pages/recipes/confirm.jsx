@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { auth } from '../../config/firebase';
 import uniqid from 'uniqid';
 
 import { useRouter } from 'next/router';
-
-//	Divide by servings function
-const divByServings = (value, servings) => {
-	return Math.round(value / servings);
-};
 
 // Api requests
 import addOne from '../../api/addOne';

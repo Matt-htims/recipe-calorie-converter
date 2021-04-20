@@ -1,4 +1,5 @@
 import { useAuth } from '../../hooks/useAuth';
+import { Divider } from 'semantic-ui-react';
 
 //	Components
 import AddRecipeSearch from '../../components/addRecipe/AddRecipeSearch';
@@ -15,9 +16,9 @@ const NewRecipe = () => {
 			</h1>
 			<div className="bg-white shadow-xl px-5 py-10 md:p-12 rounded-2xl">
 				<AddRecipeSearch />
-				<h4 className="text-center font-sans font-normal text-xl md:text-3xl">
-					or
-				</h4>
+				<div className="my-14">
+					<Divider horizontal>Or</Divider>
+				</div>
 				<AddRecipeManual />
 			</div>
 		</div>

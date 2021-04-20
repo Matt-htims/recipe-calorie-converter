@@ -6,7 +6,7 @@ const IndivRecipe = ({ image, title, calories, id }) => {
 		<>
 			<Link href={`/recipes/${id}`}>
 				<a className="flex md:space-x-6 space-x-3 shadow-lg w-11/12 rounded-xl overflow-hidden md:h-64 h-40">
-					<div className="max-w-xs w-4/12">
+					<div className="max-w-xs w-4/12 flex-none">
 						<img className="object-cover h-full w-full" src={image} alt="" />
 					</div>
 					<div className="main flex flex-col justify-between md:mt-3 md:mb-4 my-1 pr-1">
@@ -18,7 +18,7 @@ const IndivRecipe = ({ image, title, calories, id }) => {
 								{calories}
 							</p>
 							<p className="pb-1 md:pb-2 md:text-xl text-sm text-gray-900 ">
-								calories
+								{calories ? 'calories' : ''}
 							</p>
 						</div>
 					</div>

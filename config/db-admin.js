@@ -25,7 +25,7 @@ export async function showRecipe(uid, recipeId) {
 		.doc(recipeId)
 		.get()
 		.then(doc => {
-			if (doc.exists) {
+			if (doc.exists && uid === doc.data().userId) {
 				return doc.data();
 			} else {
 				console.log('No such document!');

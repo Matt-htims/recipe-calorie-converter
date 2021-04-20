@@ -37,7 +37,7 @@ const DeleteConfirm = ({ action, discardFunc, cancelFunc }) => {
 									handleScroll();
 								}}
 								color="red"
-							>{`${action.toUpperCase()} RECIPE`}</Button>
+							>{`${action.toUpperCase()}`}</Button>
 						</div>
 					</div>
 				</div>

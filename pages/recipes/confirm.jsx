@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 // Api requests
 import addOne from '../../api/addOne';
 import nutritionRequest from '../../api/nutritionRequest';
+import addOneNoCals from '../../api/addOneNoCals';
 
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';
@@ -15,6 +16,7 @@ import { enteredRecipeStore } from '../../zustand';
 import Sidebar from '../../components/showRecipe/Sidebar';
 import MainSection from '../../components/showRecipe/MainSection';
 import DeleteConfirm from '../../components/DeleteConfirm';
+import ErrorBox from '../../components/ErrorBox';
 
 const ConfirmRecipe = () => {
 	const router = useRouter();
@@ -27,6 +29,7 @@ const ConfirmRecipe = () => {
 
 	//	State
 	const [deleteOpen, setDeleteOpen] = useState(false);
+	const [edamamError, setEdamamError] = useState(false);
 
 	//	Recipe save handler
 	const handleRecipeSave = async () => {
@@ -41,8 +44,23 @@ const ConfirmRecipe = () => {
 					})
 					.catch(function (err) {
 						console.error(err);
+						setEdamamError(true);
 					});
 			});
+		} else {
+			console.log('Not logged in');
+		}
+	};
+
+	const handleNoCalRecipeSave = async () => {
+		if (auth.currentUser) {
+			auth.currentUser
+				.getIdToken(/* forceRefresh */ true)
+				.then(function (idToken) {
+					addOneNoCals(idToken, recipe, uniqid())
+						.then(() => router.push('/recipes'))
+						.catch(err => console.error(err));
+				});
 		} else {
 			console.log('Not logged in');
 		}
@@ -94,6 +112,7 @@ const ConfirmRecipe = () => {
 								>
 									Recipe preview
 								</h1>
+								{edamamError ? <ErrorBox save={handleNoCalRecipeSave} /> : ''}
 								<div className="main-section space-y-6 md:space-y-0 md:space-x-5 md:flex">
 									<div className="md:w-1/4">
 										<Sidebar

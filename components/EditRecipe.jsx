@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useRef } from 'react';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
 import { Form } from 'semantic-ui-react';
@@ -9,6 +9,9 @@ import { auth } from '../config/firebase';
 //	Funcs
 import totalNutrients from '../helper-functions/totalNutrients';
 
+// Components
+import ErrorBox from '../components/ErrorBox';
+
 // Api requests
 import updateOne from '../api/updateOne';
 import nutritionRequest from '../api/nutritionRequest';
@@ -16,7 +19,10 @@ import nutritionRequest from '../api/nutritionRequest';
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),
 	ingredients: yup.string().required('This field is required'),
-	servings: yup.number().typeError('Must be a number'),
+	servings: yup
+		.number()
+		.typeError('Must be a number')
+		.required('Must include servings'),
 	readyInMinutes: yup.number().typeError('Must be a number'),
 	instructions: yup.string(),
 	imageLink: yup.string(),
@@ -25,6 +31,11 @@ const yupValidation = yup.object().shape({
 const EditRecipe = ({ recipe }) => {
 	const router = useRouter();
 	const { id } = router.query;
+
+	//	State
+	const [edamamError, setEdamamError] = useState(false);
+
+	const formRef = useRef();
 
 	const formattedIngredients = recipe.ingredients.join('\n');
 
@@ -39,6 +50,20 @@ const EditRecipe = ({ recipe }) => {
 		glutenFree: recipe.info.glutenFree,
 		vegetarian: recipe.info.vegetarian,
 		vegan: recipe.info.vegan,
+	};
+
+	const handleNoCalRecipeSave = async () => {
+		if (auth.currentUser) {
+			auth.currentUser
+				.getIdToken(/* forceRefresh */ true)
+				.then(function (idToken) {
+					updateOne(idToken, id, formRef.current.values, false)
+						.then(() => router.push('/recipes'))
+						.catch(err => console.error(err));
+				});
+		} else {
+			console.log('Not logged in');
+		}
 	};
 
 	return (
@@ -74,7 +99,10 @@ const EditRecipe = ({ recipe }) => {
 													.then(() => router.push(`/recipes/${id}`))
 													.catch(err => console.log(err));
 											})
-											.catch(err => console.error(err, 'error'));
+											.catch(err => {
+												console.error(err, 'error');
+												setEdamamError(true);
+											});
 									} else {
 										updateOne(idToken, id, values, false)
 											.then(() => router.push(`/recipes/${id}`))
@@ -87,6 +115,7 @@ const EditRecipe = ({ recipe }) => {
 						: console.log('Not logged in', auth);
 				}}
 				validationSchema={yupValidation}
+				innerRef={formRef}
 			>
 				{({
 					values,
@@ -98,6 +127,13 @@ const EditRecipe = ({ recipe }) => {
 				}) => {
 					return (
 						<Form>
+							{edamamError ? (
+								<div className="mb-6">
+									<ErrorBox save={handleNoCalRecipeSave} />{' '}
+								</div>
+							) : (
+								''
+							)}
 							<Form.Input
 								label="Recipe name"
 								placeholder="Pizza"
@@ -250,8 +286,8 @@ Skin the carrots"
 							</div>
 
 							<div className="flex justify-center mt-14">
-								<Form.Button onClick={handleSubmit} type="submit" color="vk">
-									Add
+								<Form.Button onClick={handleSubmit} type="submit" primary>
+									Save
 								</Form.Button>
 							</div>
 						</Form>

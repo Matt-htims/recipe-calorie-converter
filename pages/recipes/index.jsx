@@ -70,7 +70,7 @@ const Recipes = () => {
 									key={recipe.id}
 									title={recipe.title}
 									calories={
-										recipe.calorieInfo ? recipe.calorieInfo.calories : 'none'
+										recipe.calorieInfo ? recipe.calorieInfo.calories : ''
 									}
 									id={recipe.id}
 									image={recipe.image}

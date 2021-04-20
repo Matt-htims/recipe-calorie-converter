@@ -20,7 +20,7 @@ const Navbar = () => {
 						onClick={closeDropDownHandler}
 					>
 						<span className="text-xl text-darkBlue font-accent font-extrabold">
-							H+LTH
+							HELTH
 						</span>
 					</a>
 				</Link>

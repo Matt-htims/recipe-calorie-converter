@@ -9,7 +9,10 @@ import { enteredRecipeStore } from '../zustand';
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),
 	ingredients: yup.string().required('This field is required'),
-	servings: yup.number().typeError('Must be a number'),
+	servings: yup
+		.number()
+		.typeError('Must be a number')
+		.required('Must include servings'),
 	readyInMinutes: yup.number().typeError('Must be a number'),
 	instructions: yup.string(),
 	imageLink: yup.string(),
@@ -52,7 +55,6 @@ const EditUnsavedRecipe = () => {
 
 	return (
 		<>
-			<h1 onClick={() => console.log(recipe)}>recipe</h1>
 			<Formik
 				initialValues={initialFormState}
 				onSubmit={(values, { resetForm }) => {
@@ -253,7 +255,7 @@ Skin the carrots"
 							</div>
 
 							<div className="flex justify-center mt-14">
-								<Form.Button onClick={handleSubmit} type="submit" color="vk">
+								<Form.Button onClick={handleSubmit} type="submit" primary>
 									Update
 								</Form.Button>
 							</div>

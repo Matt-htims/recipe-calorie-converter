@@ -86,8 +86,8 @@ const AddRecipeSearch = () => {
 					value={recipeURL}
 					placeholder="Recipe url..."
 					action={{
-						color: 'primary',
 						content: 'Add',
+						color: 'blue',
 					}}
 					error={error && { content: error, pointing: 'above' }}
 				></Form.Input>

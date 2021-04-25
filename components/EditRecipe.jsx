@@ -13,8 +13,8 @@ import totalNutrients from '../helper-functions/totalNutrients';
 import ErrorBox from '../components/ErrorBox';
 
 // Api requests
-import updateOne from '../api/updateOne';
-import nutritionRequest from '../api/nutritionRequest';
+import updateOne from '../apiFunctions/updateOne';
+import nutritionRequest from '../apiFunctions/nutritionRequest';
 
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),

@@ -9,7 +9,7 @@ import NotLogged from '../../components/NotLogged';
 import Loader from '../../components/Loader';
 
 // Api requests
-import getAll from '../../api/getAll';
+import getAll from '../../apiFunctions/getAll';
 
 const Recipes = () => {
 	const { user } = useAuth();

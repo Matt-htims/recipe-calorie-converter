@@ -11,7 +11,7 @@ import NoRecipe from '../../../components/NoRecipe';
 import NotLogged from '../../../components/NotLogged';
 
 //	Api requests
-import getOne from '../../../api/getOne';
+import getOne from '../../../apiFunctions/getOne';
 
 const Edit = () => {
 	const router = useRouter();

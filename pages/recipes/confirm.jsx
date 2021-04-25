@@ -5,9 +5,9 @@ import uniqid from 'uniqid';
 import { useRouter } from 'next/router';
 
 // Api requests
-import addOne from '../../api/addOne';
-import nutritionRequest from '../../api/nutritionRequest';
-import addOneNoCals from '../../api/addOneNoCals';
+import addOne from '../../apiFunctions/addOne';
+import nutritionRequest from '../../apiFunctions/nutritionRequest';
+import addOneNoCals from '../../apiFunctions/addOneNoCals';
 
 //	Zustand state
 import { enteredRecipeStore } from '../../zustand';

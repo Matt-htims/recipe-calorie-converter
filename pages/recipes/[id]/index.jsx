@@ -12,8 +12,8 @@ import NoRecipe from '../../../components/NoRecipe';
 import NotLogged from '../../../components/NotLogged';
 
 // Api requests
-import getOne from '../../../api/getOne';
-import deleteOne from '../../../api/deleteOne';
+import getOne from '../../../apiFunctions/getOne';
+import deleteOne from '../../../apiFunctions/deleteOne';
 
 const IndividualRecipe = () => {
 	const { user } = useAuth();

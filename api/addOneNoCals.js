@@ -4,7 +4,7 @@ import { auth } from '../config/firebase';
 const addOneRecipeNoCals = (authorizationId, recipe, recipeId) => {
 	return axios({
 		method: 'post',
-		url: 'http://localhost:3000/api/recipe',
+		url: `${process.env.NEXT_PUBLIC_URL}/api/recipe`,
 		headers: { authorization: authorizationId },
 		data: {
 			originalUrl: recipe.originalUrl,

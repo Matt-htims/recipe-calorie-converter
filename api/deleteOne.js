@@ -3,7 +3,7 @@ import axios from 'axios';
 const deleteOneRecipe = (authorizationId, recipeId) => {
 	return axios({
 		method: 'DELETE',
-		url: `http://localhost:3000/api/recipe/${recipeId}`,
+		url: `${process.env.NEXT_PUBLIC_URL}/api/recipe/${recipeId}`,
 		//	Just doing it to recipes api rather than recipe/[id] as no way of getting a specific recipe just the entire document of the user
 		headers: { authorization: authorizationId },
 	})

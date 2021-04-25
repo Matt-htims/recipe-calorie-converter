@@ -3,7 +3,7 @@ import axios from 'axios';
 const getAllRecipes = authorizationID => {
 	return axios({
 		method: 'get',
-		url: 'http://localhost:3000/api/recipes',
+		url: `${process.env.NEXT_PUBLIC_URL}/api/recipes`,
 		headers: { authorization: authorizationID },
 	})
 		.then(response => response.data)

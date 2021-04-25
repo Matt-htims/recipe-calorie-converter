@@ -93,7 +93,7 @@ const LoginForm = () => {
 									<Link href="/reset-password">
 										<a
 											href="#"
-											className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+											className="font-medium text-blue hover:text-blue focus:outline-none focus:underline transition ease-in-out duration-150"
 										>
 											Forgot your password?
 										</a>

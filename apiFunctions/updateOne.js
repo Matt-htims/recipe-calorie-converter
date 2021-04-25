@@ -30,7 +30,6 @@ const updateOneRecipe = (authorizationId, recipeId, values, update, data) => {
 			},
 		})
 			.then(response => {
-				console.log(response);
 				console.log('success');
 			})
 			.catch(err => {
@@ -101,7 +100,6 @@ const updateOneRecipe = (authorizationId, recipeId, values, update, data) => {
 			},
 		})
 			.then(response => {
-				console.log(response);
 				console.log('success');
 			})
 			.catch(err => {

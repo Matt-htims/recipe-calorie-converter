@@ -8,7 +8,6 @@ const deleteOneRecipe = (authorizationId, recipeId) => {
 		headers: { authorization: authorizationId },
 	})
 		.then(response => {
-			console.log(response);
 			console.log('success');
 		})
 		.catch(err => {

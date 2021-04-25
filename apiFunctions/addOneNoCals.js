@@ -24,7 +24,6 @@ const addOneRecipeNoCals = (authorizationId, recipe, recipeId) => {
 		},
 	})
 		.then(response => {
-			console.log(response);
 			console.log('success');
 		})
 		.catch(err => {

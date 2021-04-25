@@ -59,7 +59,6 @@ const addOneRecipe = (authorizationId, recipe, data, recipeId) => {
 		},
 	})
 		.then(response => {
-			console.log(response);
 			console.log('success');
 		})
 		.catch(err => {

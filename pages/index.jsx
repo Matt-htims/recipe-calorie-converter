@@ -1,9 +1,10 @@
-import { useState } from 'react';
+//	Components
+import ComingSoon from '../components/ComingSoon';
 
 export default function Home() {
 	return (
 		<div className="">
-			<h1>Hollo</h1>
+			<ComingSoon />
 		</div>
 	);
 }

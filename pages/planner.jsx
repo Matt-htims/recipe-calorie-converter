@@ -1,9 +1,10 @@
-import React from 'react';
+//	Components
+import ComingSoon from '../components/ComingSoon';
 
 const Planner = () => {
 	return (
 		<div>
-			<h1>Planner</h1>
+			<ComingSoon />
 		</div>
 	);
 };

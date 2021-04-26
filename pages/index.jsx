@@ -30,7 +30,7 @@ export default function Home() {
 							</a>
 						</Link>
 						<div className="flex space-x-1">
-							<p className="text-base font-sans font-medium">
+							<p className="text-base font-sans font-medium mb-4">
 								Already have an account?
 							</p>
 							<Link href="/login">

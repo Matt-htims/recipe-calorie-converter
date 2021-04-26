@@ -7,8 +7,10 @@ const NutritionBox = ({ name, amount, percent, unit }) => {
 				name === 'Calories' ? 'border border-green' : ''
 			}`}
 		>
-			<h4 className="font-sans font-medium text-sm text-gray-800">{name}</h4>
-			<p className="font-accent font-medium md:text-2xl text-lg text-gray-900 h-full">
+			<h4 className="font-sans font-medium text-sm text-gray-800 mb-4">
+				{name}
+			</h4>
+			<p className="font-accent font-medium md:text-2xl text-lg text-gray-900 h-full mb-5">
 				{amount}
 				<span className="md:text-xl text-sm text-gray-700 font-normal font-sans">
 					{unit}

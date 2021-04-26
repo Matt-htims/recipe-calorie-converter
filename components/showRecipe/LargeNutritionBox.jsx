@@ -3,7 +3,7 @@ import React from 'react';
 const LargeNutritionBox = ({ name, amount, percent, unit }) => {
 	return (
 		<div
-			className={`calories flex flex-col items-center shadow-inner rounded-lg md:w-52 w-32 pb-2 pt-6 ${
+			className={`calories flex flex-col items-center shadow-inner rounded-lg md:w-52 w-32 pb-2 md:pt-6 pt-2 ${
 				name === 'Calories' ? 'border border-green' : ''
 			}`}
 		>

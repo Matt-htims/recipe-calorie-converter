@@ -12,13 +12,16 @@ export default function Home() {
 						<img className="w-10/12" src="/foodBowl.svg" alt="" />
 					</div>
 					<div className="banner-text flex md:block flex-col items-center">
-						<h1 className="font-accent font-bold text-darkBlue lg:text-8xl text-7xl">
+						<h1 className="font-accent font-bold text-darkBlue lg:text-8xl text-7xl mb-7">
 							HELTH
 						</h1>
-						<h2 className="font-sans text-darkBlue lg:text-2xl text-xl leading-8">
+						<h2 className="font-sans text-darkBlue font-bold lg:text-2xl text-xl leading-8 mt-5 mb-4">
 							Keep calorie tracking easy,
-							<br /> You don't eat by the ingredient so why track by it
+							<br /> You don't eat by the ingredient so why track by it?
 						</h2>
+						<p className="font-sans text-darkBlue font-medium lg:text-xl text-xl leading-8">
+							Make an account to start your simplified calorie tracking journey!
+						</p>
 						<Link href="/signup">
 							<a>
 								<button className="font-sans text-yellowishWhite px-4 text-lg font-medium py-3 bg-darkBlue rounded-lg hover:bg-blue mt-9 mb-6">
@@ -42,7 +45,7 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="analyse-ingredients md:py-32 py-20">
-				<h3 className="text-center font-accent font-bold text-darkBlue md:text-5xl text-3xl">
+				<h3 className="text-center font-accent font-bold text-darkBlue md:text-5xl text-3xl mb-4">
 					Analyse by recipe not ingredient
 				</h3>
 				<p className="text-center text-sans md:text-xl text-sm font-medium">

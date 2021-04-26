@@ -7,10 +7,10 @@ const LargeNutritionBox = ({ name, amount, percent, unit }) => {
 				name === 'Calories' ? 'border border-green' : ''
 			}`}
 		>
-			<h4 className="font-sans font-medium md:text-2xl text-base text-gray-800">
+			<h4 className="font-sans font-medium md:text-2xl md:mb-4 mb-3 text-base text-gray-800">
 				{name}
 			</h4>
-			<p className="font-accent font-medium md:text-5xl text-lg text-gray-900 h-full">
+			<p className="font-accent font-medium md:text-5xl md:mb-12 mb-4 text-lg text-gray-900 h-full">
 				{amount}
 				<span className="md:text-xl text-sm text-gray-700 font-normal font-sans">
 					{unit}

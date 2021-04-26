@@ -16,7 +16,11 @@ const NutritionBox = ({ name, amount, percent, unit }) => {
 			</p>
 			<div
 				className={`percent w-11/12 md:h-full text-center p-1 rounded-md h-full ${
-					percent > 50 ? 'bg-red' : percent > 30 ? 'bg-amber' : 'bg-green'
+					percent > 50 && name !== 'Protein'
+						? 'bg-red'
+						: percent > 30
+						? 'bg-amber'
+						: 'bg-green'
 				}`}
 			>
 				<p className="font-accent text-xl font-medium text-white">{percent}%</p>

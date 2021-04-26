@@ -1,8 +1,19 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useRouter } from 'next/router';
 
 import SignUpForm from '../components/accountForms/SignUpForm';
 
 const Signup = () => {
+	const auth = useAuth();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (auth.user) {
+			router.push('/account');
+		}
+	}, [auth.user]);
 	return (
 		<div className="min-h-screen flex bg-backgroundWhite">
 			<div className="mt-8 mx-auto w-full max-w-md">

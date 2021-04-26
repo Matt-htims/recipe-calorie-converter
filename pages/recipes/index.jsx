@@ -49,7 +49,7 @@ const Recipes = () => {
 	if (loading) return <Loader />;
 	if (!user) return <NotLogged />;
 	return (
-		<div className="min-h-screen bg-backgroundWhite max-w-7xl m-auto">
+		<div className="min-h-screen bg-backgroundWhite max-w-7xl m-auto mb-20">
 			<div className="flex items-center w-11/12 mx-auto justify-between">
 				<h1 className="text-center text-3xl md:text-5xl text-darkBlue font-accent font-normal md:py-16 py-8 m-0">
 					My recipes

@@ -45,13 +45,14 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="analyse-ingredients md:py-32 py-20">
-				<h3 className="text-center font-accent font-bold text-darkBlue md:text-5xl text-3xl mb-4">
+				<h3 className="text-center font-accent font-bold text-darkBlue md:text-5xl text-3xl mb-6">
 					Analyse by recipe not ingredient
 				</h3>
 				<p className="text-center text-sans md:text-xl text-sm font-medium">
 					Break your favourite recipes down by calories and the three major
 					macronutrients:
 				</p>
+
 				<div className="flex justify-center md:space-x-4 space-x-1 md:py-20 py-10 md:px-5 px-1">
 					<LargeNutritionBox
 						name="Calories"

@@ -8,15 +8,15 @@ export default function Home() {
 		<div className="home">
 			<div className="bg-green">
 				<div className="banner mx-auto flex md:flex-row-reverse flex-col justify-between items-center px-6 md:px-20 lg:py-40 lg:px-10 md:py-32  max-w-7xl">
-					<div className="image md:p-0 p-10 flex justify-center md:justify-end">
+					<div className="image md:p-0 flex justify-center md:justify-end">
 						<img className="w-10/12" src="/foodBowl.svg" alt="" />
 					</div>
 					<div className="banner-text flex md:block flex-col items-center">
-						<h1 className="font-accent font-bold text-darkBlue lg:text-8xl text-7xl mb-7">
+						<h1 className="font-accent font-bold md:pt-0 pt-4 text-darkBlue lg:text-8xl text-7xl mb-7">
 							HELTH
 						</h1>
 						<h2 className="font-sans text-darkBlue font-bold lg:text-2xl text-xl leading-8 mt-5 mb-4">
-							Keep calorie tracking easy,
+							Keep calorie tracking easy.
 							<br /> You don't eat by the ingredient so why track by it?
 						</h2>
 						<p className="font-sans text-darkBlue font-medium lg:text-xl text-xl leading-8">

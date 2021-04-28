@@ -10,3 +10,13 @@ const Planner = () => {
 };
 
 export default Planner;
+
+const week = {
+	mon: { break: {}, lunch: {}, dinner: {}, snack: {} },
+	tues: {},
+	wed: {},
+	thurs: {},
+	fri: {},
+	sat: {},
+	sun: {},
+};

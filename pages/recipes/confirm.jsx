@@ -10,7 +10,7 @@ import nutritionRequest from '../../apiFunctions/nutritionRequest';
 import addOneNoCals from '../../apiFunctions/addOneNoCals';
 
 //	Zustand state
-import { enteredRecipeStore } from '../../zustand';
+import { enteredRecipeStore } from '../../zustand-state/enteredRecipeState';
 
 //	Components
 import Sidebar from '../../components/showRecipe/Sidebar';

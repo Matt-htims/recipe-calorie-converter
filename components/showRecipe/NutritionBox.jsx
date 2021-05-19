@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NutritionBox = ({ name, amount, percent, unit }) => {
+const NutritionBox = ({ name, amount, percent, unit, day }) => {
 	return (
 		<div
 			className={`calories flex flex-col items-center shadow-inner rounded-lg w-28 py-2 ${
@@ -18,9 +18,15 @@ const NutritionBox = ({ name, amount, percent, unit }) => {
 			</p>
 			<div
 				className={`percent w-11/12 md:h-full text-center p-1 rounded-md h-full ${
-					percent > 50 && name !== 'Protein'
+					!day
+						? percent > 50 && name !== 'Protein'
+							? 'bg-red'
+							: percent > 30
+							? 'bg-amber'
+							: 'bg-green'
+						: percent > 120
 						? 'bg-red'
-						: percent > 30
+						: percent > 100
 						? 'bg-amber'
 						: 'bg-green'
 				}`}

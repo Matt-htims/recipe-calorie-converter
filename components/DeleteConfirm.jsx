@@ -3,12 +3,13 @@ import { Button } from 'semantic-ui-react';
 
 const DeleteConfirm = ({ action, discardFunc, cancelFunc }) => {
 	useEffect(() => {
+		window.scrollTo(0, 0);
 		document.body.style.overflow = 'hidden';
+		return function cleanup() {
+			document.body.style.overflow = null;
+		};
 	}, []);
 
-	const handleScroll = () => {
-		document.body.style.overflow = null;
-	};
 	return (
 		<div className="">
 			<div className="backdrop w-screen h-full absolute top-0 left-0">
@@ -25,7 +26,6 @@ const DeleteConfirm = ({ action, discardFunc, cancelFunc }) => {
 							<Button
 								onClick={() => {
 									cancelFunc();
-									handleScroll();
 								}}
 								basic
 							>
@@ -34,7 +34,6 @@ const DeleteConfirm = ({ action, discardFunc, cancelFunc }) => {
 							<Button
 								onClick={() => {
 									discardFunc();
-									handleScroll();
 								}}
 								color="red"
 							>{`${action.toUpperCase()}`}</Button>

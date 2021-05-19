@@ -5,7 +5,7 @@ import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
 //	Zustand state
-import { enteredRecipeStore } from '../../zustand';
+import { enteredRecipeStore } from '../../zustand-state/enteredRecipeState';
 
 const initialFormState = {
 	recipeName: '',

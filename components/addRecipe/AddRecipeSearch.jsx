@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Input, Form, Button } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
 //	Zustand state
-import { enteredRecipeStore } from '../../zustand';
+import { enteredRecipeStore } from '../../zustand-state/enteredRecipeState';
 
 const AddRecipeSearch = () => {
 	const router = useRouter();
@@ -76,7 +76,7 @@ const AddRecipeSearch = () => {
 
 	return (
 		<div>
-			<h2 className="font-sans font-medium text-xl md:text-3xl">
+			<h2 className="font-sans font-medium text-xl md:text-3xl mb-4">
 				Paste the link to a recipe and we'll add it for you!
 			</h2>
 			<div className="w-6/12"></div>

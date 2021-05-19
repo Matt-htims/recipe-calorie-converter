@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 
-import { enteredRecipeStore } from '../zustand';
+import { enteredRecipeStore } from '../zustand-state/enteredRecipeState';
 
 const yupValidation = yup.object().shape({
 	recipeName: yup.string().required('This field is required'),

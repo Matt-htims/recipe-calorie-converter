@@ -55,7 +55,7 @@ const Edit = () => {
 	if (loading) return <Loader />;
 	if (!recipe.title) return <NoRecipe />;
 	return (
-		<div className="w-11/12 md:w-9/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl">
+		<div className="w-11/12 md:w-9/12 m-auto mt-12 space-y-0 md:space-y-12 max-w-7xl min-h-screen">
 			<h1 className="text-center text-3xl md:text-4xl text-darkBlue font-accent font-bold">
 				Edit your recipe
 			</h1>

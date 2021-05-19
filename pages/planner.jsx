@@ -39,7 +39,7 @@ const Planner = () => {
 			) : (
 				''
 			)}
-			<div className="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 p-4 gap-2">
+			<div className="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 p-4 md:gap-6 md:m-4">
 				<Day day="Monday" state={monday} openRecipes={handleRecipeOpen} />
 				<Day day="Tuesday" state={tuesday} openRecipes={handleRecipeOpen} />
 				<Day day="Wednesday" state={wednesday} openRecipes={handleRecipeOpen} />

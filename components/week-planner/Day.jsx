@@ -1,16 +1,15 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
+//	Helper functions
+import getPercentage from '../../helper-functions/getPercentage';
+
 //	Components
 import Meal from './Meal';
 import NutritionBox from '../showRecipe/NutritionBox';
 
-const Day = ({ day, openRecipes, state }) => {
+const Day = ({ day, openRecipes, state, weekNutState, setWeekNutState }) => {
 	const router = useRouter();
-
-	const getPercentage = (num, percentOf) => {
-		return Math.round((num / percentOf) * 100);
-	};
 
 	//	State
 	const [totalCal, setTotalCal] = useState(0);
@@ -71,6 +70,18 @@ const Day = ({ day, openRecipes, state }) => {
 		setTotalProt(prots);
 		setTotalFat(fats);
 	}, [state]);
+
+	useEffect(() => {
+		setWeekNutState({
+			...weekNutState,
+			[day]: {
+				cals: totalCal,
+				carbs: totalCarb,
+				prot: totalProt,
+				fat: totalFat,
+			},
+		});
+	}, [totalCal, totalCarb, totalProt, totalFat]);
 
 	return (
 		<div className="p-4 space-y-5 bg-white rounded-2xl shadow-lg">

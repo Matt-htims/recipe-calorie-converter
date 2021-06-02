@@ -17,6 +17,8 @@ const Day = ({ day, openRecipes, state, weekNutState, setWeekNutState }) => {
 	const [totalProt, setTotalProt] = useState(0);
 	const [totalFat, setTotalFat] = useState(0);
 
+	const [nutOpen, setNutOpen] = useState(false);
+
 	//	Handlers
 	const handleOpenRecipes = meal => {
 		router.push({
@@ -145,39 +147,50 @@ const Day = ({ day, openRecipes, state, weekNutState, setWeekNutState }) => {
 					<Meal recipes={state.snack} day={day.toLowerCase()} meal="snack" />
 				</div>
 			</div>
+			<div className="flex justify-end">
+				<p
+					className="text-right cursor-pointer font-sans font-normal text-base text-gray-600 hover:text-gray-900"
+					onClick={() => setNutOpen(!nutOpen)}
+				>
+					{nutOpen ? 'Hide nutrition' : 'Show nutrition'}
+				</p>
+			</div>
 
 			{/* DO NOT JUST HARD CODE THESE NUMBERS - WOULD BE BEST IF THE USER COULD INPUT ON THEIR ACCOUNT THE CALORIES AND MACROS THEY WANT TO BE HITTING */}
-
-			<div className="flex justify-center">
-				<NutritionBox
-					name="Calories"
-					amount={totalCal}
-					percent={getPercentage(totalCal, 2000)}
-					unit="kcal"
-					day={true}
-				/>
-				<NutritionBox
-					name="Carbs"
-					amount={totalCarb}
-					percent={getPercentage(totalCarb, 400)}
-					unit="g"
-					day={true}
-				/>
-				<NutritionBox
-					name="Protein"
-					amount={totalProt}
-					percent={getPercentage(totalProt, 120)}
-					unit="g"
-					day={true}
-				/>
-				<NutritionBox
-					name="Fat"
-					amount={totalFat}
-					percent={getPercentage(totalFat, 300)}
-					unit="g"
-					day={true}
-				/>
-			</div>
+			{nutOpen ? (
+				<div className="flex justify-center">
+					<NutritionBox
+						name="Calories"
+						amount={totalCal}
+						percent={getPercentage(totalCal, 2000)}
+						unit="kcal"
+						day={true}
+					/>
+					<NutritionBox
+						name="Carbs"
+						amount={totalCarb}
+						percent={getPercentage(totalCarb, 400)}
+						unit="g"
+						day={true}
+					/>
+					<NutritionBox
+						name="Protein"
+						amount={totalProt}
+						percent={getPercentage(totalProt, 120)}
+						unit="g"
+						day={true}
+					/>
+					<NutritionBox
+						name="Fat"
+						amount={totalFat}
+						percent={getPercentage(totalFat, 300)}
+						unit="g"
+						day={true}
+					/>
+				</div>
+			) : (
+				''
+			)}
 		</div>
 	);
 };

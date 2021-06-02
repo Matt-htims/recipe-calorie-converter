@@ -74,7 +74,7 @@ const Planner = () => {
 			) : (
 				''
 			)}
-			<div className="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 p-4 md:gap-6 md:m-4">
+			<div className="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 p-4 md:gap-6 md:m-4 gap-3">
 				<Day
 					day="Monday"
 					state={monday}

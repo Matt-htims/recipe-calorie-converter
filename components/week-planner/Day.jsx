@@ -8,7 +8,7 @@ import getPercentage from '../../helper-functions/getPercentage';
 import Meal from './Meal';
 import NutritionBox from '../showRecipe/NutritionBox';
 
-const Day = ({ day, openRecipes, state, weekNutState, setWeekNutState }) => {
+const Day = ({ day, openRecipes, state, setWeekNutState }) => {
 	const router = useRouter();
 
 	//	State
@@ -74,15 +74,15 @@ const Day = ({ day, openRecipes, state, weekNutState, setWeekNutState }) => {
 	}, [state]);
 
 	useEffect(() => {
-		setWeekNutState({
-			...weekNutState,
+		setWeekNutState(prevState => ({
+			...prevState,
 			[day]: {
 				cals: totalCal,
 				carbs: totalCarb,
 				prot: totalProt,
 				fat: totalFat,
 			},
-		});
+		}));
 	}, [totalCal, totalCarb, totalProt, totalFat]);
 
 	return (

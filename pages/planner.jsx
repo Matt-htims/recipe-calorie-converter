@@ -79,49 +79,42 @@ const Planner = () => {
 					day="Monday"
 					state={monday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Tuesday"
 					state={tuesday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Wednesday"
 					state={wednesday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Thursday"
 					state={thursday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Friday"
 					state={friday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Saturday"
 					state={saturday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<Day
 					day="Sunday"
 					state={sunday}
 					openRecipes={handleRecipeOpen}
-					weekNutState={weeklyNut}
 					setWeekNutState={setWeeklyNut}
 				/>
 				<div className="p-4 bg-white rounded-2xl shadow-lg space-y-16">
@@ -164,7 +157,9 @@ const Planner = () => {
 			<div className="flex justify-center">
 				<button
 					className="bg-white font-accent font-base text-base border border-gray-700 rounded-md py-3 px-4 hover:bg-darkBlue hover:text-white "
-					onClick={resetAll}
+					onClick={() => {
+						resetAll();
+					}}
 				>
 					Reset all
 				</button>
